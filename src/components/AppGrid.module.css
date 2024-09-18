@@ -1,0 +1,53 @@
+.emoji {
+  cursor: pointer;
+
+  position: relative;
+
+  outline: 2px solid transparent;
+  border-radius: theme('borderRadius.lg');
+  transform: scale(1);
+  transition: transform 100ms ease-in-out;
+
+  &:hover,
+  &:focus {
+    background-color: hsl(var(--accent));
+  }
+
+  &:active,
+  &.emoji--selected {
+    transform: scale(0.9);
+    outline-color: hsl(var(--ring));
+  }
+}
+
+.emoji-tooltip {
+  display: block;
+  opacity: 0;
+
+  user-select: none;
+  pointer-events: none;
+  position: absolute;
+
+  top: calc(100% + 4px);
+  left: -50%;
+  right: -50%;
+  height: min-content;
+
+  padding: 0.2rem;
+
+  text-transform: capitalize;
+  text-align: center;
+  line-clamp: 1;
+  overflow: hidden;
+
+  color: theme('colors.foreground');
+  background: theme('colors.background');
+  outline: 2px solid theme('colors.ring');
+
+  transition: all 200ms ease-in-out;
+  transform: scale(0.8);
+
+  border-radius: theme('borderRadius.sm');
+  font-size: theme('fontSize.base');
+  font-weight: theme('fontWeight.bold');
+}

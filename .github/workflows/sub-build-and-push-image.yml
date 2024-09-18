@@ -1,0 +1,69 @@
+name: 'Sub: Build and Push Docker Image'
+on:
+  workflow_call:
+    inputs:
+      registry:
+        type: string
+        required: false
+        default: 'ghcr.io'
+        description: 'Docker image registry'
+      tags:
+        type: string
+        required: true
+        description: 'Docker tags (CSV, and must include image names)'
+      platforms:
+        type: string
+        required: true
+        description: 'Platforms (CSV)'
+      build_cache_image:
+        type: string
+        required: true
+        description: 'Build cache image name to use (e.g. image:build-cache)'
+      context:
+        type: string
+        required: true
+        description: 'Docker context'
+    secrets:
+      REGISTRY_USERNAME:
+        required: true
+      REGISTRY_PASSWORD:
+        required: true
+      BUILD_ARGS:
+        required: false
+      BUILD_SECRETS:
+        required: false
+
+jobs:
+  build_and_push_image:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Logging input
+        run: |
+          echo "Registry: ${{ inputs.registry }}"
+          echo "Tags: ${{ inputs.tags }}"
+          echo "Platforms: ${{ inputs.platforms }}"
+          echo "Build Cache Image: ${{ inputs.build_cache_image }}"
+          echo "Build Context: ${{ inputs.context }}"
+      - uses: actions/checkout@v4
+      - name: Setup Buildx
+        uses: docker/setup-buildx-action@988b5a0280414f521da01fcc63a27aeeb4b104db # v3.6.1
+        with:
+          install: true
+      - name: Login to registry
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        with:
+          registry: ${{ inputs.registry }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - name: 'Build & Push ${{ inputs.tags }} Image to Registry'
+        uses: docker/build-push-action@5cd11c3a4ced054e52742c5fd54dca954e0edd85 # v6.7.0
+        with:
+          push: true
+          sbom: true
+          tags: ${{ inputs.tags }}
+          context: ${{ inputs.context }}
+          platforms: ${{ inputs.platforms }}
+          secrets: ${{ secrets.BUILD_SECRETS }}
+          build-args: ${{ secrets.BUILD_ARGS }}
+          cache-from: type=registry,ref=${{ inputs.build_cache_image }}
+          cache-to: type=registry,ref=${{ inputs.build_cache_image }},mode=max,ttl=1w

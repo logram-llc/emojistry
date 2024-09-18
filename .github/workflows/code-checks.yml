@@ -1,0 +1,56 @@
+name: Code Checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  lint:
+    name: Run ESLint
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js and Install Dependencies
+        uses: ./.github/actions/setup-test-environ
+        with:
+          node-version: '21'
+
+      - name: Run ESLint
+        run: npm run lint
+
+  prettier:
+    name: Run Prettier
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js and Install Dependencies
+        uses: ./.github/actions/setup-test-environ
+        with:
+          node-version: '21'
+
+      - name: Run Prettier
+        run: npm run format -- --check
+
+  tests:
+    name: Run Tests
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js and Install Dependencies
+        uses: ./.github/actions/setup-test-environ
+        with:
+          node-version: '21'
+
+      - name: Run Tests
+        run: npm run test

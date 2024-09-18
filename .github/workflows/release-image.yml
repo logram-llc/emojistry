@@ -1,0 +1,83 @@
+name: Release Image
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  get_metadata:
+    runs-on: ubuntu-22.04
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+      tags: ${{ steps.metadata.outputs.tags }}
+      image: ${{ steps.metadata.outputs.image }}
+      build_cache_image: ${{ steps.metadata.outputs.build_cache_image }}
+      creation: ${{ steps.metadata.outputs.creation }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+      - name: Get Version
+        id: get_version
+        run: |
+          VERSION=$(basename ${GITHUB_REF#refs/tags/})
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Construct image metadata
+        id: metadata
+        env:
+          REGISTRY: 'ghcr.io'
+        run: |
+          REPO='${{ github.repository }}'
+          REGISTRY='${{ env.REGISTRY }}'
+          IMAGE_TAG_BASE="$REGISTRY/$REPO"
+          VERSION='${{ steps.get_version.outputs.version }}'
+
+          TAGS="$IMAGE_TAG_BASE:latest"
+          TAGS="$TAGS,$IMAGE_TAG_BASE:$VERSION"
+
+          echo "Using tags: $TAGS"
+          echo "Using registry: $REGISTRY"
+          echo "Version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tags=$TAGS" >> $GITHUB_OUTPUT
+          echo "build_cache_image=$IMAGE_TAG_BASE:build-cache" >> $GITHUB_OUTPUT
+          echo "creation=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
+      - name: Verify metadata output
+        run: |
+          if [[ -z "${{ steps.metadata.outputs.version }}" ]]; then
+              echo 'Cannot determine version'
+              exit 1
+          fi
+
+          if [[ -z "${{ steps.metadata.outputs.tags }}" ]]; then
+              echo 'Cannot determine image tags'
+              exit 1
+          fi
+
+          if [[ -z "${{ steps.metadata.outputs.build_cache_image }}" ]]; then
+              echo 'Cannot determine build cache image'
+              exit 1
+          fi
+
+  build_and_push_image:
+    uses: ./.github/workflows/sub-build-and-push-image.yml
+    needs: [get_metadata]
+    secrets:
+      REGISTRY_USERNAME: '${{ secrets.GH_USERNAME }}'
+      REGISTRY_PASSWORD: '${{ secrets.GH_ACCESS_TOKEN }}'
+      # spreet v0.12.0-dev
+      BUILD_ARGS: |
+        "SPREET_GIT_REV=014ce6445790cbc3008e17797925419fe8ecc8e1"
+        "SPREET_GIT_URL=https://github.com/flother/spreet"
+        "BUILD_COMMIT_SHA=${{ github.sha }}"
+        "BUILD_URL=${{ github.event.repository.html_url }}"
+        "BUILD_CLONE_URL=${{ github.event.repository.clone_url }}"
+        "BUILD_DOCUMENTATION_URL=${{ github.event.repository.html_url }}"
+        "BUILD_VERSION=${{ needs.get_metadata.outputs.version }}"
+        "BUILD_CREATION_DATE=${{ needs.get_metadata.outputs.creation }}"
+    with:
+      registry: 'ghcr.io'
+      tags: ${{ needs.get_metadata.outputs.tags }}
+      platforms: 'linux/amd64'
+      context: './'
+      build_cache_image: ${{ needs.get_metadata.outputs.build_cache_image }}

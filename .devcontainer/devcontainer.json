@@ -1,0 +1,15 @@
+{
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "NODE_IMAGE_TAG": "21.7.0",
+      "SPREET_GIT_URL": "https://github.com/flother/spreet",
+      "SPREET_GIT_REV": "014ce6445790cbc3008e17797925419fe8ecc8e1"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["esbenp.prettier-vscode"]
+    }
+  }
+}

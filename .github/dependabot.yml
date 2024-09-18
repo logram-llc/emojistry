@@ -1,0 +1,34 @@
+version: 2
+updates:
+  # Enable version updates for npm
+  - package-ecosystem: 'npm'
+    directory: '/'
+    labels:
+      - 'dependabot :robot:'
+    reviewers:
+      - 'nicholas-ramsey'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 6
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    labels:
+      - 'dependabot :robot:'
+    reviewers:
+      - 'nicholas-ramsey'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 6
+
+  # Enable version updates for Docker
+  - package-ecosystem: 'Docker'
+    directory: '/'
+    labels:
+      - 'dependabot :robot:'
+    reviewers:
+      - 'nicholas-ramsey'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 6
