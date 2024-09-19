@@ -27,6 +27,8 @@ import {
   SheetDescription,
 } from '@/components/ui/sheet';
 import { AppSkintoneSelect } from './AppSkintoneSelect';
+import { usePictureInPicture } from '@/providers/PictureInPictureProvider';
+import { cn } from '@/lib/utils';
 
 const AppHeader = ({
   children,
@@ -39,6 +41,7 @@ const AppHeader = ({
 }): React.ReactNode => {
   const { settings, setSettings } = useEmojiGridSettings();
   const { theme, setTheme } = useTheme();
+  const { isPictureInPicture } = usePictureInPicture();
 
   const appBack = (
     <Button asChild variant="rounded" size="sm" className="group duration-75">
@@ -144,7 +147,7 @@ const AppHeader = ({
       className="hidden lg:flex items-center gap-1.5 py-1 px-1.5"
       {...props}
     >
-      {appBack}
+      {!isPictureInPicture && appBack}
 
       {children}
 
@@ -153,9 +156,15 @@ const AppHeader = ({
   );
 
   const mobileHeader = (
-    <header className="lg:hidden flex flex-col gap-1.5 py-1 px-1.5" {...props}>
+    <header
+      className={cn('lg:hidden flex gap-1.5 py-1 px-1.5', {
+        'flex-row-reverse': isPictureInPicture,
+        'flex-col': !isPictureInPicture,
+      })}
+      {...props}
+    >
       <div className="flex justify-between items-center">
-        {appBack}
+        {!isPictureInPicture && appBack}
 
         <Sheet>
           <SheetTrigger asChild>
