@@ -150,13 +150,16 @@ function PictureInPictureButton() {
 }
 
 function App() {
-  const { isPictureInPicture } = usePictureInPicture();
+  const { isPictureInPicture, supportsPictureInPicture } =
+    usePictureInPicture();
 
   return (
     <>
       <TooltipProvider delayDuration={600}>
         <EmojiExplorer></EmojiExplorer>
-        {!isPictureInPicture && <PictureInPictureButton />}
+        {supportsPictureInPicture && !isPictureInPicture && (
+          <PictureInPictureButton />
+        )}
       </TooltipProvider>
     </>
   );
