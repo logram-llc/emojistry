@@ -71,7 +71,10 @@ const AppSkintoneSelect = forwardRef<HTMLButtonElement>((_, ref) => {
   const skintoneDropdownId = 'skintone-dropdown';
 
   const handleSkintoneChange = useCallback((skintone: EmojiSkintone) => {
-    setSettings({ ...settings, skintone: skintone });
+    setSettings((prevSettings) => ({
+      ...prevSettings,
+      skintone,
+    }));
   }, []);
 
   const handleKeyboardPress = useCallback(

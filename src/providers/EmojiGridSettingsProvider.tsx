@@ -1,5 +1,11 @@
 import { EmojiSkintone } from '@/lib/emojis/EmojiTypes';
-import { createContext, useContext, useState, ReactNode, useMemo } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from 'react';
 
 export type EmojiGridSettings = {
   emojiGap: number;
@@ -22,7 +28,7 @@ const initialState: EmojiGridSettings = {
 
 interface EmojiGridSettingsState {
   settings: EmojiGridSettings;
-  setSettings: (settings: EmojiGridSettings) => void;
+  setSettings: React.Dispatch<React.SetStateAction<EmojiGridSettings>>;
 }
 
 const EmojiGridSettingsContext = createContext<EmojiGridSettingsState>({
@@ -34,7 +40,7 @@ function EmojiGridSettingsProvider({
   children,
   storageKey = 'emojistry-grid-settings',
 }: EmojiGridSettingsProviderProps) {
-  const [settings, _setSettings] = useState<EmojiGridSettings>(() => {
+  const [settings, setSettings] = useState<EmojiGridSettings>(() => {
     const storedValue = localStorage.getItem(storageKey);
     if (!storedValue) {
       return initialState;
@@ -42,15 +48,14 @@ function EmojiGridSettingsProvider({
     return { ...initialState, ...JSON.parse(storedValue) } as EmojiGridSettings;
   });
 
-  const setSettings = (settings: EmojiGridSettings) => {
-    localStorage.setItem(storageKey, JSON.stringify(settings));
-    _setSettings(settings);
-  };
-
-  const value = useMemo(() => ({ settings, setSettings }), [settings]);
+  useEffect(() => {
+    if (settings) {
+      localStorage.setItem(storageKey, JSON.stringify(settings));
+    }
+  }, [settings]);
 
   return (
-    <EmojiGridSettingsContext.Provider value={value}>
+    <EmojiGridSettingsContext.Provider value={{ settings, setSettings }}>
       {children}
     </EmojiGridSettingsContext.Provider>
   );
