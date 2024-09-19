@@ -37,7 +37,13 @@ RUN set -eux \
 
 FROM docker.io/caddy:2.8.4-alpine AS production
 
+WORKDIR /app
+
+COPY --from=builder /app/LICENSE ./
+COPY --from=builder /app/build ./build
+
 ARG BUILD_VERSION
+ENV BUILD_VERSION=${BUILD_VERSION}
 ARG BUILD_CREATION_DATE
 ARG BUILD_COMMIT_SHA
 ARG BUILD_CLONE_URL
@@ -56,13 +62,6 @@ LABEL org.opencontainers.image.revision=${BUILD_COMMIT_SHA}
 LABEL org.opencontainers.image.url=${BUILD_CLONE_URL}
 LABEL org.opencontainers.image.documentation=${BUILD_DOCUMENTATION_URL}
 LABEL org.opencontainers.image.source=${BUILD_URL}
-
-WORKDIR /app
-
-COPY --from=builder /app/LICENSE ./
-COPY --from=builder /app/build ./build
-
-ENV BUILD_VERSION=${BUILD_VERSION}
 
 EXPOSE 5173
 
