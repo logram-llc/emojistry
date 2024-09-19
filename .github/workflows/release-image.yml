@@ -6,7 +6,7 @@ on:
 
 jobs:
   get_metadata:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       version: ${{ steps.get_version.outputs.version }}
       tags: ${{ steps.metadata.outputs.tags }}

@@ -9,7 +9,7 @@ on:
 jobs:
   lint:
     name: Run ESLint
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout code
@@ -25,7 +25,7 @@ jobs:
 
   prettier:
     name: Run Prettier
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout code
@@ -41,7 +41,7 @@ jobs:
 
   tests:
     name: Run Tests
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout code

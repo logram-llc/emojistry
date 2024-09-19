@@ -13,7 +13,7 @@ on:
 
 jobs:
   actionlint:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: reviewdog/action-actionlint@12f7cb8c93ab327c99dec3a1d502c0f314978afd # v1.55.0
