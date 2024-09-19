@@ -13,7 +13,7 @@
 <div align="center">
 
 ![Code Checks Workflow Status](https://github.com/logram-llc/emojistry/actions/workflows/code-checks.yml/badge.svg?branch=main)
-![Deploy Workflow Status](https://github.com/logram-llc/emojistry/actions/workflows/build.yml/badge.svg)
+![Deploy Workflow Status](https://github.com/logram-llc/emojistry/actions/workflows/deploy.yml/badge.svg)
 ![GitHub License](https://img.shields.io/github/license/logram-llc/emojistry)
 ![GitHub Release](https://img.shields.io/github/v/release/logram-llc/emojistry?sort=date)
 
