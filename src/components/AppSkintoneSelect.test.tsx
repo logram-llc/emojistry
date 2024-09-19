@@ -97,12 +97,10 @@ describe('AppSkintoneSelect', () => {
     );
 
     // Assert
-    expect(mockSetSettings).toBeCalledWith({
-      emojiSize: 64,
-      showEmojiGroups: false,
-      skintone: toSelectSkintone,
-      emojiGap: 1,
-    });
+    expect(mockSetSettings).toBeCalled();
+
+    const setSettingsCallback = mockSetSettings.mock.calls[0][0];
+    expect(setSettingsCallback().skintone).toStrictEqual(toSelectSkintone);
   });
 
   test.each([{ keypress: '{Enter}' }, { keypress: '{Space}' }])(
@@ -123,12 +121,10 @@ describe('AppSkintoneSelect', () => {
       );
 
       // Assert
-      expect(mockSetSettings).toBeCalledWith({
-        emojiSize: 64,
-        showEmojiGroups: false,
-        skintone: toSelectSkintone,
-        emojiGap: 1,
-      });
+      expect(mockSetSettings).toBeCalled();
+
+      const setSettingsCallback = mockSetSettings.mock.calls[0][0];
+      expect(setSettingsCallback().skintone).toStrictEqual(toSelectSkintone);
     },
   );
 });
