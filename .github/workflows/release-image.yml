@@ -20,17 +20,17 @@ jobs:
       - name: Get Version
         id: get_version
         run: |
-          VERSION=$(basename ${GITHUB_REF#refs/tags/})
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          VERSION="$(basename "${GITHUB_REF#refs/tags/}")"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
       - name: Construct image metadata
         id: metadata
         env:
           REGISTRY: 'ghcr.io'
         run: |
-          REPO='${{ github.repository }}'
-          REGISTRY='${{ env.REGISTRY }}'
+          REPO="${{ github.repository }}"
+          REGISTRY="${{ env.REGISTRY }}"
           IMAGE_TAG_BASE="$REGISTRY/$REPO"
-          VERSION='${{ steps.get_version.outputs.version }}'
+          VERSION="${{ steps.get_version.outputs.version }}"
 
           TAGS="$IMAGE_TAG_BASE:latest"
           TAGS="$TAGS,$IMAGE_TAG_BASE:$VERSION"
@@ -38,10 +38,13 @@ jobs:
           echo "Using tags: $TAGS"
           echo "Using registry: $REGISTRY"
           echo "Version: $VERSION"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "tags=$TAGS" >> $GITHUB_OUTPUT
-          echo "build_cache_image=$IMAGE_TAG_BASE:build-cache" >> $GITHUB_OUTPUT
-          echo "creation=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
+
+          {
+            echo "version=${VERSION}"
+            echo "tags=${TAGS}"
+            echo "build_cache_image=${IMAGE_TAG_BASE}:build-cache"
+            echo "creation=$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          } >> "$GITHUB_OUTPUT"
       - name: Verify metadata output
         run: |
           if [[ -z "${{ steps.metadata.outputs.version }}" ]]; then
