@@ -34,7 +34,6 @@ npm run start
 **Using Docker**:
 
 ```
-docker pull ghcr.io/logram-llc/emojistry:latest
 docker run -p 8000:5173 ghcr.io/logram-llc/emojistry:latest
 ```
 
