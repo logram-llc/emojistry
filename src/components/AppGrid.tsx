@@ -169,33 +169,37 @@ export const EmojiGrid = React.memo<EmojiGridProps>(
     }, [emojis]);
 
     const grid = !showEmojiGroups ? (
-      <div
-        className="grid mt-3"
-        style={{
-          gridTemplateColumns: `repeat(auto-fit, ${emojiSize}px)`,
-          gridAutoRows: emojiSize,
-          gap: 12 * emojiScale,
-        }}
-        role="tablist"
-      >
-        {emojis.map((emoji) => (
-          <Emoji
-            key={emoji.id}
-            emoji={emoji}
-            selected={Boolean(selectedEmoji && selectedEmoji.id === emoji.id)}
-            onClick={(e) => {
-              e.preventDefault();
-              handleEmojiClick(emoji);
-            }}
-            onKeyDown={(event) => handleEmojiKeyboardPress(event, emoji)}
-            role="listitem"
-            ref={selectedEmoji?.id === emoji.id ? selectedEmojiRef : undefined}
-            aria-controls={emojiPanelId}
-            emojiFamily={EmojiFamily[emojiFamily]}
-            scale={emojiScale}
-            selectedSkintone={skintone}
-          />
-        ))}
+      <div className="overflow-hidden">
+        <div
+          className="grid mt-3"
+          style={{
+            gridTemplateColumns: `repeat(auto-fit, ${emojiSize}px)`,
+            gridAutoRows: emojiSize,
+            gap: 12 * emojiScale,
+          }}
+          role="tablist"
+        >
+          {emojis.map((emoji) => (
+            <Emoji
+              key={emoji.id}
+              emoji={emoji}
+              selected={Boolean(selectedEmoji && selectedEmoji.id === emoji.id)}
+              onClick={(e) => {
+                e.preventDefault();
+                handleEmojiClick(emoji);
+              }}
+              onKeyDown={(event) => handleEmojiKeyboardPress(event, emoji)}
+              role="listitem"
+              ref={
+                selectedEmoji?.id === emoji.id ? selectedEmojiRef : undefined
+              }
+              aria-controls={emojiPanelId}
+              emojiFamily={EmojiFamily[emojiFamily]}
+              scale={emojiScale}
+              selectedSkintone={skintone}
+            />
+          ))}
+        </div>
       </div>
     ) : (
       <div className="overflow-hidden">
