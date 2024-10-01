@@ -57,7 +57,7 @@ class SeoManager {
 
     this.setTitle(`${emoji.glyph} ${emoji.tts} ${emoji.family} | Emojistry`);
     this.setDescription(
-      `${emoji.tts} emoji from ${emoji.family} | An emoji catalog for power users`,
+      `The ${emoji.tts} (${emoji.glyph}) emoji from the ${emoji.family} family. Keywords: ${emoji.keywords.map((k) => k.replaceAll('-', ' ')).join(', ')}`,
     );
     this.setCanonicalUrl(UrlManager.getEmojiPath(emoji));
   }
