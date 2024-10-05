@@ -5,7 +5,7 @@ const DEFAULT_SEO = {
   title: 'Fluent Emoji | Emojistry',
   description:
     "An emoji catalog for power users, browse Microsoft's Fluent Emoji library",
-  canonicalUrl: 'https://emoji.logram.io',
+  canonicalUrl: 'https://emojistry.com',
 };
 
 class SeoManager {

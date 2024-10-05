@@ -9,7 +9,7 @@ import {
 import { join } from 'path';
 
 // TODO: Relocate to env var
-const BASE_URL = 'https://emoji.logram.io';
+const BASE_URL = 'https://emojistry.com';
 
 (async () => {
   console.log(`Building sitemap.xml...`);
