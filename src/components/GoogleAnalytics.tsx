@@ -9,7 +9,7 @@ declare const window: Window &
     dataLayer: unknown[];
   };
 
-export function Analytics({ gTagId }: AnalyticsProps): null {
+export function GoogleAnalytics({ gTagId }: AnalyticsProps): null {
   useEffect(() => {
     const script = document.createElement('script');
     script.async = true;
