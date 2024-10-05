@@ -4,7 +4,7 @@
 
 <h1 align="center" style="border-bottom: none">
     <b>
-        <a href="https://emoji.logram.io">🚀 Emojistry</a><br>
+        <a href="https://emojistry.com">🚀 Emojistry</a><br>
     </b>
     An emoji browser for power-users
     <br>
