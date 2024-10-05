@@ -1,14 +1,13 @@
 import { useEffect } from 'react';
 
-declare global {
-  interface Window {
-    dataLayer: unknown[];
-  }
-}
-
 type AnalyticsProps = {
   gTagId: string;
 };
+
+declare const window: Window &
+  typeof globalThis & {
+    dataLayer: unknown[];
+  };
 
 export function Analytics({ gTagId }: AnalyticsProps): null {
   useEffect(() => {
