@@ -1,7 +1,6 @@
 import { EmojiMetadataReader } from '../src/lib/emojis/EmojiMetadataReader';
 import { EmojiFamily } from '../src/lib/emojis/EmojiTypes';
 import { UrlManager } from '../src/lib/UrlManager';
-import { getEnvRequired } from '../src/lib/utils';
 import {
   EnumChangefreq,
   simpleSitemapAndIndex,
@@ -9,7 +8,12 @@ import {
 } from 'sitemap';
 import { join } from 'path';
 
-const DOMAIN_NAME = getEnvRequired('VITE_DOMAIN_NAME');
+const DOMAIN_NAME = process.env.VITE_DOMAIN_NAME;
+
+if (!DOMAIN_NAME) {
+  throw new Error('The env var `VITE_DOMAIN_NAME` is required');
+}
+
 const BASE_URL = `https://${DOMAIN_NAME}`;
 
 (async () => {
