@@ -231,7 +231,7 @@ export class FluentUIFamilyBuilder {
           (styleGroup) =>
             Object.values(styleGroup).map((imagePath) => imagePath),
         );
-        await copyFiles(this._emojisAllPublicDirectory, ...imagePaths);
+        await copyFiles(this._emojisAllPublicDirectory, ...new Set(imagePaths));
 
         const skintoneStyles = Object.entries(emojiEntry.skintones).flatMap(
           ([skintoneLabel, styleGroup]) =>
@@ -242,7 +242,7 @@ export class FluentUIFamilyBuilder {
         emojiStyles.push(...skintoneStyles);
       } else {
         const imagePaths = Object.values(emojiEntry.styles);
-        await copyFiles(this._emojisAllPublicDirectory, ...imagePaths);
+        await copyFiles(this._emojisAllPublicDirectory, ...new Set(imagePaths));
 
         emojiStyles.push(
           ...Object.entries(emojiEntry.styles).map(([styleLabel, imagePath]) =>
