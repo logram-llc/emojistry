@@ -5,7 +5,6 @@ const DEFAULT_SEO = {
   title: 'Fluent Emoji | Emojistry',
   description:
     "An emoji catalog for power users, browse Microsoft's Fluent Emoji library",
-  canonicalUrl: 'https://emoji.logram.io',
 };
 
 class SeoManager {
@@ -46,7 +45,7 @@ class SeoManager {
   setDefaults(): void {
     this.setTitle(DEFAULT_SEO.title);
     this.setDescription(DEFAULT_SEO.description);
-    this.setCanonicalUrl(DEFAULT_SEO.canonicalUrl);
+    this.setCanonicalUrl('/');
   }
 
   setEmoji(emoji: IEmoji | null): void {

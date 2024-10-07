@@ -1,6 +1,7 @@
 import { EmojiMetadataReader } from '../src/lib/emojis/EmojiMetadataReader';
 import { EmojiFamily } from '../src/lib/emojis/EmojiTypes';
 import { UrlManager } from '../src/lib/UrlManager';
+import { getEnvRequired } from '../src/lib/utils';
 import {
   EnumChangefreq,
   simpleSitemapAndIndex,
@@ -8,8 +9,8 @@ import {
 } from 'sitemap';
 import { join } from 'path';
 
-// TODO: Relocate to env var
-const BASE_URL = 'https://emoji.logram.io';
+const DOMAIN_NAME = getEnvRequired('VITE_DOMAIN_NAME');
+const BASE_URL = `https://${DOMAIN_NAME}`;
 
 (async () => {
   console.log(`Building sitemap.xml...`);
