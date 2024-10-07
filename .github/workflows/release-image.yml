@@ -72,6 +72,8 @@ jobs:
       BUILD_ARGS: |
         "SPREET_GIT_REV=014ce6445790cbc3008e17797925419fe8ecc8e1"
         "SPREET_GIT_URL=https://github.com/flother/spreet"
+        "VITE_GA_TAG_ID="
+        "VITE_DOMAIN_NAME=${{ secrets.VITE_DOMAIN_NAME }}"
         "BUILD_COMMIT_SHA=${{ github.sha }}"
         "BUILD_URL=${{ github.event.repository.html_url }}"
         "BUILD_CLONE_URL=${{ github.event.repository.clone_url }}"

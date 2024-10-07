@@ -31,6 +31,11 @@ ENV PATH="${PATH}:${BUILDER_CARGO_BIN_PATH}/bin/"
 
 COPY . ./
 
+ARG VITE_DOMAIN_NAME
+ARG VITE_GA_TAG_ID
+ENV VITE_DOMAIN_NAME=${VITE_DOMAIN_NAME}
+ENV VITE_GA_TAG_ID=${VITE_GA_TAG_ID}
+
 # NOTE(nicholas-ramsey): Build
 RUN set -eux \
     && npm run build
