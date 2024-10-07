@@ -30,16 +30,10 @@ import {
 } from '@/components/ui/tooltip';
 import { usePictureInPicture } from './providers/PictureInPictureProvider';
 
-const DOMAIN_NAME = import.meta.env.VITE_DOMAIN_NAME;
-
-if (!DOMAIN_NAME) {
-  throw new Error('The `VITE_DOMAIN_NAME` env var is not set');
-}
-
 const EMOJI_SEARCH_INDEX = new EmojiIndexReader();
 const EMOJI_REPOSITORY = new EmojiMetadataReader();
 const URL_MANAGER = new UrlManager(EMOJI_REPOSITORY);
-const SEO_MANAGER = new SeoManager(DOMAIN_NAME);
+const SEO_MANAGER = new SeoManager();
 
 function EmojiExplorer() {
   const [query, setQuery] = useState('');

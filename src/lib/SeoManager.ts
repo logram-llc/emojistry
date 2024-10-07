@@ -8,12 +8,6 @@ const DEFAULT_SEO = {
 };
 
 class SeoManager {
-  private domainName: string;
-
-  constructor(domainName: string) {
-    this.domainName = domainName;
-  }
-
   private setTitle(title: string): void {
     const titleElem = document.querySelector('title');
     if (titleElem !== null) {
@@ -51,7 +45,7 @@ class SeoManager {
   setDefaults(): void {
     this.setTitle(DEFAULT_SEO.title);
     this.setDescription(DEFAULT_SEO.description);
-    this.setCanonicalUrl(`https://${this.domainName}`);
+    this.setCanonicalUrl('/');
   }
 
   setEmoji(emoji: IEmoji | null): void {

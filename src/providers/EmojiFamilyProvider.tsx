@@ -41,7 +41,7 @@ function EmojiFamilyProvider({
 
   useEffect(() => {
     new UrlManager().setFamily(family);
-    new SeoManager('example.org').setFamily(family);
+    new SeoManager().setFamily(family);
   }, [family]);
 
   const setFamily = (family: keyof typeof EmojiFamily) => {
