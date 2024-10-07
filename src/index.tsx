@@ -5,13 +5,12 @@ import { GoogleAnalytics } from './components/GoogleAnalytics';
 import { EmojiFamilyProvider } from '@/providers/EmojiFamilyProvider';
 import { EmojiGridSettingsProvider } from '@/providers/EmojiGridSettingsProvider';
 import { PictureInPictureProvider } from '@/providers/PictureInPictureProvider';
-import { getEnvOptional } from '@/lib/utils';
 
 const CONTAINER = document.getElementById('root');
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const ROOT = createRoot(CONTAINER!);
 
-const G_TAG_ID = getEnvOptional('VITE_GA_TAG_ID');
+const G_TAG_ID = import.meta.env.VITE_GA_TAG_ID;
 
 ROOT.render(
   <React.StrictMode>
