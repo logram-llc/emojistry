@@ -42,6 +42,9 @@ jobs:
           commit: 014ce6445790cbc3008e17797925419fe8ecc8e1 # v0.12.0-dev
 
       - name: Build Artifacts
+        env:
+          VITE_GA_TAG_ID: ${{ secrets.VITE_GA_TAG_ID }}
+          VITE_DOMAIN_NAME: ${{ secrets.VITE_DOMAIN_NAME }}
         run: |
           npm run build
 

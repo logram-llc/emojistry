@@ -27,7 +27,8 @@
 git clone https://github.com/logram-llc/emojistry
 cd emojistry
 npm install
-npm run build
+cp .env.sample .env
+VITE_DOMAIN_NAME=example.org npm run build
 npm run start
 ```
 
