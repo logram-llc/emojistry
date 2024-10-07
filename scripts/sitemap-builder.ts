@@ -8,8 +8,13 @@ import {
 } from 'sitemap';
 import { join } from 'path';
 
-// TODO: Relocate to env var
-const BASE_URL = 'https://emojistry.com';
+const DOMAIN_NAME = process.env.VITE_DOMAIN_NAME;
+
+if (!DOMAIN_NAME) {
+  throw new Error('The `VITE_DOMAIN_NAME` env var is not set');
+}
+
+const BASE_URL = `https://${DOMAIN_NAME}`;
 
 (async () => {
   console.log(`Building sitemap.xml...`);

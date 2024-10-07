@@ -5,10 +5,15 @@ const DEFAULT_SEO = {
   title: 'Fluent Emoji | Emojistry',
   description:
     "An emoji catalog for power users, browse Microsoft's Fluent Emoji library",
-  canonicalUrl: 'https://emojistry.com',
 };
 
 class SeoManager {
+  private domainName: string;
+
+  constructor(domainName: string) {
+    this.domainName = domainName;
+  }
+
   private setTitle(title: string): void {
     const titleElem = document.querySelector('title');
     if (titleElem !== null) {
@@ -46,7 +51,7 @@ class SeoManager {
   setDefaults(): void {
     this.setTitle(DEFAULT_SEO.title);
     this.setDescription(DEFAULT_SEO.description);
-    this.setCanonicalUrl(DEFAULT_SEO.canonicalUrl);
+    this.setCanonicalUrl(`https://${this.domainName}`);
   }
 
   setEmoji(emoji: IEmoji | null): void {
