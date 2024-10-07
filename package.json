@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "vite preview",
     "start": "vite",
-    "build": "npm run clean && npm run build:emoji-metadata && npm run build:search-index && npm run build:sitemap && vite build",
+    "build": "npm run clean && npm run build:emoji-metadata && npm run build:search-index && npm run build:sitemap && cross-env VITE_DOMAIN_NAME=emojistry.com vite build",
     "clean": "tsx scripts/cleanup-build.ts",
     "build:emoji-metadata": "npm run clone:cldr && npm run clone:fluentui && npm run clone:noto && tsx scripts/emoji-metadata-builder.ts ./src/Artifacts/ scripts/assets/cldr/",
     "build:search-index": "tsx scripts/search-index-builder.ts ./src/Artifacts/",
