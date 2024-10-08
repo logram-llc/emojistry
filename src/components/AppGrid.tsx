@@ -246,7 +246,7 @@ export const EmojiGrid = React.memo<EmojiGridProps>(
     );
 
     return (
-      <div className="flex flex-row gap-1 relative">
+      <div className="flex flex-row gap-1 relative min-h-[600px]">
         <div className="flex-1 grow">{grid}</div>
 
         {selectedEmoji !== null && (
