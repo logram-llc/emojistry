@@ -135,6 +135,7 @@ describe('EmojiPanel', () => {
         write: vi.fn(),
       },
     });
+    global.ClipboardItem = vi.fn();
 
     // Act
     renderComponentWithProviders(
@@ -153,7 +154,7 @@ describe('EmojiPanel', () => {
     await userEvent.click(copyButton);
 
     expect(mockFetch).toHaveBeenCalledOnce();
-    expect(navigator.clipboard.writeText).toHaveBeenCalledOnce();
+    expect(navigator.clipboard.write).toHaveBeenCalledOnce();
   });
 
   it('[component] should copy the emoji image to clipboard when copy button is clicked', async () => {
