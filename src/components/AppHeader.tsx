@@ -1,13 +1,7 @@
 import React, { HTMLProps } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Moon,
-  Sun,
-  ArrowLeft,
-  Group,
-  Settings,
-  AArrowDown,
-} from 'lucide-react';
+import { NotoEmojiRocket } from '@/components/icons/NotoEmojiRocket';
+import { Moon, Sun, Group, Settings, AArrowDown } from 'lucide-react';
 import { Toggle } from '@/components/ui/toggle';
 import {
   Tooltip,
@@ -30,30 +24,28 @@ import { AppSkintoneSelect } from './AppSkintoneSelect';
 import { usePictureInPicture } from '@/providers/PictureInPictureProvider';
 import { cn } from '@/lib/utils';
 
-const AppHeader = ({
-  children,
+function AppLogo() {
+  return (
+    <div className="inline-flex justify-center items-center">
+      <span className="inline-flex justify-center items-center mr-1 size-8 min-w-6 min-h-6">
+        {NotoEmojiRocket}
+      </span>
+      <span className="inline text-lg font-bold mr-3">Emojistry</span>
+    </div>
+  );
+}
+
+function AppSettings({
   setSortComparator,
-  ...props
-}: HTMLProps<HTMLDivElement> & {
+}: {
   setSortComparator: React.Dispatch<
     React.SetStateAction<IEmojiSortComparator | null>
   >;
-}): React.ReactNode => {
+}) {
   const { settings, setSettings } = useEmojiGridSettings();
   const { theme, setTheme } = useTheme();
-  const { isPictureInPicture } = usePictureInPicture();
 
-  const appBack = (
-    <Button asChild variant="rounded" size="sm" className="group duration-75">
-      <a href="https://logram.io">
-        <ArrowLeft className="size-4 min-w-4 mr-1 transition group-hover:rotate-45" />
-        <span className="hidden md:inline">Back to Logram</span>
-        <span className="inline md:hidden">Logram</span>
-      </a>
-    </Button>
-  );
-
-  const appSettings = (
+  return (
     <>
       <AppEmojiFamilySelect className="lg:w-40" />
       <AppSort className="lg:w-32" setSortComparator={setSortComparator} />
@@ -141,21 +133,47 @@ const AppHeader = ({
       </div>
     </>
   );
+}
 
-  const desktopHeader = (
+function DesktopHeader({
+  children,
+  setSortComparator,
+  ...props
+}: HTMLProps<HTMLDivElement> & {
+  setSortComparator: React.Dispatch<
+    React.SetStateAction<IEmojiSortComparator | null>
+  >;
+}) {
+  const { isPictureInPicture } = usePictureInPicture();
+
+  return (
     <header
       className="hidden lg:flex items-center gap-1.5 py-1 px-1.5"
       {...props}
     >
-      {!isPictureInPicture && appBack}
+      {!isPictureInPicture && <AppLogo />}
 
       {children}
 
-      <div className="flex lg:gap-1 items-center">{appSettings}</div>
+      <div className="flex lg:gap-1 items-center">
+        <AppSettings setSortComparator={setSortComparator} />
+      </div>
     </header>
   );
+}
 
-  const mobileHeader = (
+function MobileHeader({
+  children,
+  setSortComparator,
+  ...props
+}: HTMLProps<HTMLDivElement> & {
+  setSortComparator: React.Dispatch<
+    React.SetStateAction<IEmojiSortComparator | null>
+  >;
+}) {
+  const { isPictureInPicture } = usePictureInPicture();
+
+  return (
     <header
       className={cn('lg:hidden flex gap-1.5 py-1 px-1.5', {
         'flex-row-reverse': isPictureInPicture,
@@ -164,7 +182,7 @@ const AppHeader = ({
       {...props}
     >
       <div className="flex justify-between items-center">
-        {!isPictureInPicture && appBack}
+        {!isPictureInPicture && <AppLogo />}
 
         <Sheet>
           <SheetTrigger asChild>
@@ -178,7 +196,7 @@ const AppHeader = ({
               App settings
             </SheetDescription>
 
-            {appSettings}
+            <AppSettings setSortComparator={setSortComparator} />
           </SheetContent>
         </Sheet>
       </div>
@@ -186,11 +204,20 @@ const AppHeader = ({
       {children}
     </header>
   );
+}
 
+const AppHeader = ({
+  setSortComparator,
+  ...props
+}: HTMLProps<HTMLDivElement> & {
+  setSortComparator: React.Dispatch<
+    React.SetStateAction<IEmojiSortComparator | null>
+  >;
+}): React.ReactNode => {
   return (
     <>
-      {desktopHeader}
-      {mobileHeader}
+      <DesktopHeader setSortComparator={setSortComparator} {...props} />
+      <MobileHeader setSortComparator={setSortComparator} {...props} />
     </>
   );
 };
