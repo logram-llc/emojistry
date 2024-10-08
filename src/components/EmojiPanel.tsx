@@ -58,7 +58,7 @@ function TooltipOnClick({
   message: string;
   delay?: number;
   onSuccess?: () => Promise<void> | void;
-}>) {
+}>): React.ReactElement {
   const [open, setOpen] = useState<boolean>(false);
 
   const handleClick = useCallback(async () => {
@@ -80,6 +80,64 @@ function TooltipOnClick({
       </TooltipTrigger>
       <TooltipContent>{message}</TooltipContent>
     </Tooltip>
+  );
+}
+
+function ShareAction({
+  isMobile,
+  onClick,
+  ariaLabel,
+}: {
+  isMobile: boolean;
+  onClick: () => void;
+  ariaLabel: string;
+}): React.ReactElement {
+  return (
+    <TooltipOnClick message="Copied URL!" onSuccess={onClick}>
+      {/* TODO(nicholas-ramsey): Clean this module/component up. I don't like using `data-testid` */}
+      <Button
+        variant="ghost"
+        size="xs"
+        className={isMobile ? 'flex lg:hidden' : 'hidden lg:flex'}
+        aria-label={ariaLabel}
+        data-testid={isMobile ? 'mobile-share-url' : 'desktop-share-url'}
+      >
+        <Share2 className="size-5 min-w-5" />
+      </Button>
+    </TooltipOnClick>
+  );
+}
+
+function ShareButton({ emoji }: { emoji: IEmoji }): React.ReactElement {
+  const emojiUrl = new URL(
+    UrlManager.getEmojiPath(emoji),
+    window.location.href,
+  ).toString();
+  const handleCopy = () => copyTextToClipboard(emojiUrl);
+
+  const title = `${emoji.tts} emoji`;
+  const sharePayload = { url: emojiUrl, title };
+  const canShare = navigator.canShare?.(sharePayload);
+  const handleShare = () => navigator.share(sharePayload);
+
+  return (
+    <>
+      {/* Desktop share */}
+      <ShareAction
+        isMobile={false}
+        onClick={handleCopy}
+        ariaLabel="Copy emoji URL"
+        data-testid="desktop-share-url"
+      />
+
+      {/* Mobile share */}
+      <ShareAction
+        isMobile={true}
+        onClick={canShare ? handleShare : handleCopy}
+        ariaLabel={canShare ? 'Share emoji URL' : 'Copy emoji URL'}
+        data-testid="mobile-share-url"
+      />
+    </>
   );
 }
 
@@ -119,26 +177,7 @@ function EmojiPanel({ emoji, id, onClose }: EmojiPanelProps): ReactNode {
             {emoji.tts}
           </h2>
 
-          <TooltipOnClick
-            message="Copied URL!"
-            onSuccess={() =>
-              copyTextToClipboard(
-                new URL(
-                  UrlManager.getEmojiPath(emoji),
-                  window.location.href,
-                ).toString(),
-              )
-            }
-          >
-            <Button
-              variant="ghost"
-              size="xs"
-              className="group flex"
-              aria-label="Copy emoji URL"
-            >
-              <Share2 className="size-5 min-w-5" />
-            </Button>
-          </TooltipOnClick>
+          <ShareButton emoji={emoji} />
         </div>
 
         <Button

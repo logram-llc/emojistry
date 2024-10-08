@@ -268,6 +268,7 @@ describe('EmojiPanel', () => {
       clipboard: {
         writeText: vi.fn(),
       },
+      canShare: vi.fn(() => false),
     });
 
     const emoji = EMOJI_FIXTURES[0];
@@ -282,9 +283,7 @@ describe('EmojiPanel', () => {
     );
 
     // Assert
-    const copyUrlButton = screen.getByRole('button', {
-      name: /copy emoji url/i,
-    });
+    const copyUrlButton = screen.getByTestId('mobile-share-url');
     expect(copyUrlButton).toBeInTheDocument();
 
     await userEvent.click(copyUrlButton);
