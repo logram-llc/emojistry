@@ -15,6 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { Search } from 'lucide-react';
 
 type AppSearchProps = {
   setQuery: React.Dispatch<React.SetStateAction<string>>;
@@ -143,6 +144,7 @@ const AppSearch = ({
             id="search-input"
             ref={searchInputRef}
             type="text"
+            icon={<Search className="size-4 min-w-4" />}
             placeholder="Search"
             value={query}
             className={cn(
