@@ -20,23 +20,11 @@ import { useEmojiGridSettings } from '@/providers/EmojiGridSettingsProvider';
  * Copies the given text to the clipboard.
  * @param text - The text to be copied.
  */
-async function copyTextToClipboard(text: string): Promise<void> {
+function copyTextToClipboard(text: string): Promise<void> {
   return navigator.clipboard.writeText(text);
 }
 
-async function copyImageToClipboard(blob: Blob) {
-  if (!blob.type.startsWith('image/')) {
-    throw new Error('Provided blob is not an image.');
-  }
-
-  return navigator.clipboard.write([
-    new ClipboardItem({
-      [blob.type]: blob,
-    }),
-  ]);
-}
-
-function getFilenameFromPath(path: string) {
+function getFilenameFromPath(path: string): string {
   const normalizedPath = path.replace(/\\/g, '/');
 
   const filename = normalizedPath.substring(
@@ -111,17 +99,12 @@ function EmojiPanel({ emoji, id, onClose }: EmojiPanelProps): ReactNode {
   }, [emoji.id, settings.skintone]);
 
   const handleCopyClick = useCallback(async () => {
-    const res = await fetch(emojiStyle.url);
-    if (!res.ok) {
-      throw new Error('Failed to download SVG');
-    }
-    if (emojiStyle.isSvg) {
-      const svg = await res.text();
-      await copyTextToClipboard(svg);
-    } else {
-      const image = await res.blob();
-      await copyImageToClipboard(image);
-    }
+    const mimeType = emojiStyle.isSvg ? 'text/plain' : 'image/png';
+    await navigator.clipboard.write([
+      new ClipboardItem({
+        [mimeType]: fetch(emojiStyle.url).then((res) => res.blob()),
+      }),
+    ]);
   }, [emojiStyle.id]);
 
   const handleDownloadClick = useCallback(() => {
