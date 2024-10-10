@@ -33,7 +33,7 @@ ENV PATH="${PATH}:${BUILDER_CWEBP_BIN_PATH}"
 RUN set -euxo pipefail \
     && mkdir --parents "${BUILDER_CWEBP_BIN_PATH}" \
     && curl --fail --silent --show-error --location "${CWEBP_URL}" \
-        | tar --gzip --extract --verbose --file - --strip-components=2 --directory "${BUILDER_CWEBP_BIN_PATH}" "libwebp-*/bin/cwebp"
+        | tar --gzip --extract --verbose --file - --strip-components=2 --wildcards --directory "${BUILDER_CWEBP_BIN_PATH}" "libwebp-*/bin/cwebp"
 
 COPY package.json package-lock.json ./
 RUN set -eux \
