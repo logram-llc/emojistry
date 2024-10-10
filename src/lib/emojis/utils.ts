@@ -16,7 +16,7 @@ export function getFamilySearchIndexFile(family: EmojiFamily): string {
  * Returns the spritesheet name for a skintone (e.g. `Dark.png`, `Medium-Light.png`)
  */
 export function getSkintoneSpritesheet(skintone: EmojiSkintone): string {
-  return `${skintone}.png`;
+  return `${skintone}.webp`;
 }
 
 /**

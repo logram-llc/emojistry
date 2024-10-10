@@ -3,6 +3,14 @@ on:
   release:
     types:
       - published
+  workflow_dispatch:
+    inputs:
+      branch_name:
+        type: string
+        default: main
+      dry_run:
+        type: boolean
+        description: 'Simulates a deployment by generating build artifacts without actually deploying'
 
 jobs:
   get_metadata:
@@ -17,11 +25,13 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: '0'
+
       - name: Get Version
         id: get_version
         run: |
           VERSION="$(basename "${GITHUB_REF#refs/tags/}")"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
       - name: Construct image metadata
         id: metadata
         env:
@@ -45,6 +55,7 @@ jobs:
             echo "build_cache_image=${IMAGE_TAG_BASE}:build-cache"
             echo "creation=$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
           } >> "$GITHUB_OUTPUT"
+
       - name: Verify metadata output
         run: |
           if [[ -z "${{ steps.metadata.outputs.version }}" ]]; then
@@ -72,6 +83,7 @@ jobs:
       BUILD_ARGS: |
         "SPREET_GIT_REV=014ce6445790cbc3008e17797925419fe8ecc8e1"
         "SPREET_GIT_URL=https://github.com/flother/spreet"
+        "CWEBP_URL=https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.4.0-linux-x86-64.tar.gz"
         "VITE_GA_TAG_ID="
         "VITE_DOMAIN_NAME=${{ secrets.VITE_DOMAIN_NAME }}"
         "BUILD_COMMIT_SHA=${{ github.sha }}"

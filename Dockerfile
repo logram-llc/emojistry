@@ -13,6 +13,7 @@ RUN set -eux \
 RUN set -eux \
     && apk add --no-cache git=2.45.2-r0 cargo=1.81.0-r0
 
+# NOTE(nicholas-ramsey): Install spreet & cargo
 ARG SPREET_GIT_URL
 ARG SPREET_GIT_REV
 
@@ -20,14 +21,23 @@ ENV BUILDER_CARGO_BIN_PATH="/app/.cargo/"
 ENV PATH="${PATH}:${BUILDER_CARGO_BIN_PATH}/bin/"
     
 RUN set -eux \
-    && mkdir -p ${BUILDER_CARGO_BIN_PATH} \
+    && mkdir --parents "${BUILDER_CARGO_BIN_PATH}" \
     && cargo install spreet --git="${SPREET_GIT_URL}" --rev="${SPREET_GIT_REV}" --root="${BUILDER_CARGO_BIN_PATH}"
+
+# NOTE(nicholas-ramsey): Install cwebp
+ARG CWEBP_URL
+
+ENV BUILDER_CWEBP_BIN_PATH="/app/.cwebp/bin/"
+ENV PATH="${PATH}:${BUILDER_CWEBP_BIN_PATH}"
+
+RUN set -euxo pipefail \
+    && mkdir --parents "${BUILDER_CWEBP_BIN_PATH}" \
+    && curl --fail --silent --show-error --location "${CWEBP_URL}" \
+        | tar --gzip --extract --verbose --file - --strip-components=2 --directory "${BUILDER_CWEBP_BIN_PATH}" "libwebp-*/bin/cwebp"
 
 COPY package.json package-lock.json ./
 RUN set -eux \
     && npm ci
-
-ENV PATH="${PATH}:${BUILDER_CARGO_BIN_PATH}/bin/"
 
 COPY . ./
 
