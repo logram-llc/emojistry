@@ -9,6 +9,8 @@ on:
       branch_name:
         type: string
         default: main
+      dry_run:
+        type: boolean
 
 concurrency:
   group: ${{ github.workflow }}
@@ -41,6 +43,13 @@ jobs:
           git: https://github.com/flother/spreet
           commit: 014ce6445790cbc3008e17797925419fe8ecc8e1 # v0.12.0-dev
 
+      - name: Install cwebp
+        env:
+          CWEBP_URL: 'https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.4.0-linux-x86-64.tar.gz'
+        run: |
+          curl --fail --silent --show-error --location ${CWEBP_URL} \
+            | tar --gzip --extract --verbose --file - --strip-components=2 --directory ${BUILDER_CWEBP_BIN_PATH} "libwebp-*/bin/cwebp"
+
       - name: Build Artifacts
         env:
           VITE_GA_TAG_ID: ${{ secrets.VITE_GA_TAG_ID }}
@@ -50,6 +59,7 @@ jobs:
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@f0a1cd58cd66095dee69bfa18fa5efd1dde93bca # v1
+        if: ${{ ! inputs.dry_run }}
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
