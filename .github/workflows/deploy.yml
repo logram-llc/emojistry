@@ -48,8 +48,14 @@ jobs:
         env:
           CWEBP_URL: 'https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.4.0-linux-x86-64.tar.gz'
         run: |
+          CWEBP_BIN_PATH="$HOME/cwebp"
+
+          mkdir -p "$CWEBP_BIN_PATH" 
+
           curl --fail --silent --show-error --location "$CWEBP_URL" \
-            | tar --gzip --extract --verbose --file - --strip-components=2 --wildcards --directory /usr/bin "libwebp-*/bin/cwebp"
+              | tar --gzip --extract --verbose --file - --strip-components=2 --wildcards --directory "$CWEBP_BIN_PATH" "libwebp-*/bin/cwebp"
+
+          echo "$CWEBP_BIN_PATH" >> "$GITHUB_PATH"
 
       - name: Build Artifacts
         env:
