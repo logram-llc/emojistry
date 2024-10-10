@@ -11,7 +11,7 @@ RUN set -eux \
 
 # NOTE(nicholas-ramsey): Install build dependencies
 RUN set -eux \
-    && apk add --no-cache git=2.45.2-r0 cargo=1.81.0-r0
+    && apk add --no-cache git=2.45.2-r0 cargo=1.81.0-r0 curl=8.10.1-r0
 
 # NOTE(nicholas-ramsey): Install spreet & cargo
 ARG SPREET_GIT_URL
@@ -28,12 +28,17 @@ RUN set -eux \
 ARG CWEBP_URL
 
 ENV BUILDER_CWEBP_BIN_PATH="/app/.cwebp/bin/"
+ENV BUILDER_CWEBP_TMP_PATH="/app/.cwebp/tmp"
 ENV PATH="${PATH}:${BUILDER_CWEBP_BIN_PATH}"
 
 RUN set -eux \
-    && mkdir --parents "${BUILDER_CWEBP_BIN_PATH}" \
+    && mkdir --parents "${BUILDER_CWEBP_BIN_PATH}" "${BUILDER_CWEBP_TMP_PATH}" \
     && curl --fail --silent --show-error --location "${CWEBP_URL}" \
-        | tar --gzip --extract --verbose --file - --strip-components=2 --wildcards --directory "${BUILDER_CWEBP_BIN_PATH}" "libwebp-*/bin/cwebp"
+        | tar --gzip --extract --verbose --file - --strip-components=2 --directory "${BUILDER_CWEBP_TMP_PATH}" \
+    && find "${BUILDER_CWEBP_TMP_PATH}" -type f -path "*/cwebp" -exec mv {} "${BUILDER_CWEBP_BIN_PATH}/cwebp" \; \
+    && if [ ! -f "${BUILDER_CWEBP_BIN_PATH}/cwebp" ]; then \ 
+            echo 'Error: cwebp binary not moved.' && exit 1; \
+        fi
 
 COPY package.json package-lock.json ./
 RUN set -eux \
