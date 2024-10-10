@@ -11,6 +11,7 @@ on:
         default: main
       dry_run:
         type: boolean
+        description: 'Simulates a deployment by generating build artifacts without actually deploying'
 
 concurrency:
   group: ${{ github.workflow }}
@@ -47,8 +48,8 @@ jobs:
         env:
           CWEBP_URL: 'https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.4.0-linux-x86-64.tar.gz'
         run: |
-          curl --fail --silent --show-error --location ${CWEBP_URL} \
-            | tar --gzip --extract --verbose --file - --strip-components=2 --directory ${BUILDER_CWEBP_BIN_PATH} "libwebp-*/bin/cwebp"
+          curl --fail --silent --show-error --location "$CWEBP_URL" \
+            | tar --gzip --extract --verbose --file - --strip-components=2 --directory /usr/bin "libwebp-*/bin/cwebp"
 
       - name: Build Artifacts
         env:
