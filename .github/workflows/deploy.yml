@@ -11,7 +11,7 @@ on:
         default: main
       dry_run:
         type: boolean
-        description: 'Simulates a deployment by generating build artifacts without actually deploying'
+        description: 'Dry run'
 
 concurrency:
   group: ${{ github.workflow }}
