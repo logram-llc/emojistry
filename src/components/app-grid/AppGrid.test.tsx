@@ -10,7 +10,7 @@ import {
   Mocked,
   test,
 } from 'vitest';
-import { EmojiGrid } from '@/components/AppGrid';
+import { EmojiGrid } from '@/components/app-grid/AppGrid';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import {
   IEmoji,

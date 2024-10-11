@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { PictureInPicture } from 'lucide-react';
-import { EmojiGrid } from '@/components/AppGrid';
+import { EmojiGrid } from '@/components/app-grid/AppGrid';
 import { AppHeader } from '@/components/AppHeader';
 import { AppSearch } from '@/components/AppSearch';
 import { TooltipProvider } from '@/components/ui/tooltip';
