@@ -164,7 +164,7 @@ function createEmptyCell(): IEmptyCell {
   };
 }
 
-function generateEmojiCells({
+function generateCells({
   emojis,
   groupedEmojis,
   showEmojiGroups,
@@ -300,11 +300,10 @@ export const EmojiGrid = memo<EmojiGridProps>(
           {({ height, width }) => {
             const columnCount = Math.floor(
               width /
-                ((EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP * emojiScale) *
-                  emojiScale),
+                ((EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale),
             );
 
-            const cells = generateEmojiCells({
+            const cells = generateCells({
               emojis,
               groupedEmojis,
               showEmojiGroups,
@@ -336,17 +335,16 @@ export const EmojiGrid = memo<EmojiGridProps>(
               <VariableSizeGrid<IEmojiGridCellData>
                 {...defaultGridProps}
                 columnWidth={() =>
-                  (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP * emojiScale) *
-                  emojiScale
+                  Math.floor(
+                    (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale,
+                  )
                 }
                 rowHeight={(rowIndex) => {
                   const item = cells[rowIndex];
 
                   return item.type === 'group-label'
                     ? 30
-                    : (EMOJI_SIZE_IN_SPRITESHEET +
-                        EMOJI_GRID_GAP * emojiScale) *
-                        emojiScale;
+                    : (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale;
                 }}
               >
                 {EmojiGridCell}
@@ -355,12 +353,10 @@ export const EmojiGrid = memo<EmojiGridProps>(
               <FixedSizeGrid<IEmojiGridCellData>
                 {...defaultGridProps}
                 columnWidth={
-                  (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP * emojiScale) *
-                  emojiScale
+                  (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale
                 }
                 rowHeight={
-                  (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP * emojiScale) *
-                  emojiScale
+                  (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale
                 }
               >
                 {EmojiGridCell}
