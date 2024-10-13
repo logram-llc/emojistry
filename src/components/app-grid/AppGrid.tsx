@@ -179,18 +179,18 @@ function generateEmojiCells({
     return emojis.map(createEmojiCell);
   }
 
-  const emojiCells: EmojiGridCellType[] = [];
+  const cells: EmojiGridCellType[] = [];
 
   Object.entries(groupedEmojis).forEach(([group, emojis]) => {
-    emojiCells.push(createGroupLabelCell(group));
+    cells.push(createGroupLabelCell(group));
 
     const remainingInRow = columnCount - 1;
 
-    emojiCells.push(...new Array(remainingInRow).fill(createEmptyCell()));
+    cells.push(...new Array(remainingInRow).fill(createEmptyCell()));
 
     let remainingSpots = columnCount;
 
-    emojiCells.push(
+    cells.push(
       ...emojis.map((emoji) => {
         remainingSpots--;
 
@@ -203,11 +203,11 @@ function generateEmojiCells({
     );
 
     if (remainingSpots > 0 && remainingSpots !== columnCount) {
-      emojiCells.push(...new Array(remainingSpots).fill(createEmptyCell()));
+      cells.push(...new Array(remainingSpots).fill(createEmptyCell()));
     }
   });
 
-  return emojiCells;
+  return cells;
 }
 
 interface EmojiGridProps {
@@ -304,7 +304,7 @@ export const EmojiGrid = memo<EmojiGridProps>(
                   emojiScale),
             );
 
-            const emojiCells = generateEmojiCells({
+            const cells = generateEmojiCells({
               emojis,
               groupedEmojis,
               showEmojiGroups,
@@ -313,7 +313,7 @@ export const EmojiGrid = memo<EmojiGridProps>(
 
             const defaultGridProps = {
               itemData: {
-                emojiCells,
+                emojiCells: cells,
                 selectedEmoji,
                 selectedEmojiRef,
                 emojiPanelId,
@@ -329,7 +329,7 @@ export const EmojiGrid = memo<EmojiGridProps>(
               width,
               height,
               columnCount,
-              rowCount: Math.ceil(emojiCells.length / columnCount),
+              rowCount: Math.ceil(cells.length / columnCount),
             };
 
             return showEmojiGroups ? (
@@ -340,7 +340,7 @@ export const EmojiGrid = memo<EmojiGridProps>(
                   emojiScale
                 }
                 rowHeight={(rowIndex) => {
-                  const item = emojiCells[rowIndex];
+                  const item = cells[rowIndex];
 
                   return item.type === 'group-label'
                     ? 30
