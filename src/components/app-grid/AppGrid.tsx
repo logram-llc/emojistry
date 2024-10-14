@@ -295,81 +295,80 @@ export const EmojiGrid = memo<EmojiGridProps>(
     }, [emojis]);
 
     const grid = (
-      <div className="overflow-hidden mt-3 h-[92vh]">
-        <AutoSizer key={emojiSize}>
-          {({ height, width }) => {
-            const columnCount = Math.floor(
-              width /
-                ((EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale),
-            );
+      <AutoSizer key={emojiSize} className="overflow-hidden">
+        {({ height, width }) => {
+          const columnCount = Math.floor(
+            width / ((EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale),
+          );
 
-            const cells = generateCells({
-              emojis,
-              groupedEmojis,
-              showEmojiGroups,
+          const cells = generateCells({
+            emojis,
+            groupedEmojis,
+            showEmojiGroups,
+            columnCount,
+          });
+
+          const defaultGridProps = {
+            itemData: {
+              emojiCells: cells,
+              selectedEmoji,
+              selectedEmojiRef,
+              emojiPanelId,
+              emojiScale,
+              emojiFamily,
+              skintone,
+              handleEmojiClick,
+              handleEmojiKeyboardPress,
               columnCount,
-            });
+            },
+            overscanRowCount: 5,
+            innerRef: gridRef,
+            width,
+            height,
+            columnCount,
+            rowCount: Math.ceil(cells.length / columnCount),
+          };
 
-            const defaultGridProps = {
-              itemData: {
-                emojiCells: cells,
-                selectedEmoji,
-                selectedEmojiRef,
-                emojiPanelId,
-                emojiScale,
-                emojiFamily,
-                skintone,
-                handleEmojiClick,
-                handleEmojiKeyboardPress,
-                columnCount,
-              },
-              overscanRowCount: 5,
-              innerRef: gridRef,
-              width,
-              height,
-              columnCount,
-              rowCount: Math.ceil(cells.length / columnCount),
-            };
+          return showEmojiGroups ? (
+            <VariableSizeGrid<IEmojiGridCellData>
+              {...defaultGridProps}
+              columnWidth={() =>
+                Math.floor(
+                  (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale,
+                )
+              }
+              rowHeight={(rowIndex) => {
+                const item = cells[rowIndex];
 
-            return showEmojiGroups ? (
-              <VariableSizeGrid<IEmojiGridCellData>
-                {...defaultGridProps}
-                columnWidth={() =>
-                  Math.floor(
-                    (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale,
-                  )
-                }
-                rowHeight={(rowIndex) => {
-                  const item = cells[rowIndex];
-
-                  return item.type === 'group-label'
-                    ? 30
-                    : (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale;
-                }}
-              >
-                {EmojiGridCell}
-              </VariableSizeGrid>
-            ) : (
-              <FixedSizeGrid<IEmojiGridCellData>
-                {...defaultGridProps}
-                columnWidth={
-                  (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale
-                }
-                rowHeight={
-                  (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale
-                }
-              >
-                {EmojiGridCell}
-              </FixedSizeGrid>
-            );
-          }}
-        </AutoSizer>
-      </div>
+                return item.type === 'group-label'
+                  ? 30
+                  : (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale;
+              }}
+              className="!overflow-x-hidden scrollbar-thin"
+            >
+              {EmojiGridCell}
+            </VariableSizeGrid>
+          ) : (
+            <FixedSizeGrid<IEmojiGridCellData>
+              {...defaultGridProps}
+              columnWidth={Math.floor(
+                (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale,
+              )}
+              rowHeight={
+                (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale
+              }
+              className="!overflow-x-hidden scrollbar-thin"
+            >
+              {EmojiGridCell}
+            </FixedSizeGrid>
+          );
+        }}
+      </AutoSizer>
     );
 
     return (
-      <div className="flex flex-row gap-1 relative min-h-[600px]">
-        <div className="flex-1 grow">{grid}</div>
+      <div className="flex flex-row grow relative min-h-[600px]">
+        <div className="grow">{grid}</div>
 
         {selectedEmoji !== null && (
           <div className="lg:w-96 bg-card p-4 fixed bottom-0 left-0 right-0 my-2 mx-2 lg:sticky lg:top-20 lg:bottom-none lg:left-none lg:my-0 rounded-2xl h-max">
