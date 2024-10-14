@@ -111,6 +111,17 @@ vi.mock('@/providers/EmojiFamilyProvider', () => ({
   useEmojiFamily: vi.fn(),
 }));
 
+// NOTE(nicholas-ramsey): Since it's ran headless, no content in the grid
+// is rendered because the window is seen as too small.
+// Mock and specify an explicit window size.
+vi.mock('react-virtualized-auto-sizer', () => ({
+  default: ({
+    children,
+  }: {
+    children: (size: { height: number; width: number }) => React.ReactNode;
+  }) => children({ height: 600, width: 600 }),
+}));
+
 describe('EmojiGrid', () => {
   let mockUrlManager: Partial<Mocked<UrlManager>>;
   let mockSeoManager: Partial<Mocked<SeoManager>>;
