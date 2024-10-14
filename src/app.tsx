@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { PictureInPicture } from 'lucide-react';
-import { EmojiGrid } from '@/components/AppGrid';
+import { EmojiGrid } from '@/components/app-grid/AppGrid';
 import { AppHeader } from '@/components/AppHeader';
 import { AppSearch } from '@/components/AppSearch';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -138,7 +138,7 @@ function PictureInPictureButton() {
         <Button
           size="icon"
           variant="rounded"
-          className="fixed z-50 drop-shadow-lg bottom-2 right-2"
+          className="fixed z-50 drop-shadow-lg bottom-2 right-4"
           onClick={openPictureInPicture}
         >
           <PictureInPicture className="size-5 min-w-5" />
