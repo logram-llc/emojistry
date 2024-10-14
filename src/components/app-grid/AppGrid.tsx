@@ -367,7 +367,7 @@ export const EmojiGrid = memo<EmojiGridProps>(
     );
 
     return (
-      <div className="flex flex-row grow relative min-h-[600px]">
+      <div className="flex flex-row grow relative">
         <div className="grow">{grid}</div>
 
         {selectedEmoji !== null && (
