@@ -220,7 +220,7 @@ function EmojiPanel({ emoji, id, onClose }: EmojiPanelProps): ReactNode {
         {Object.keys(emoji.styles).length > 1 && (
           <div className="my-2">
             <span className="sr-only">Variants</span>
-            <ul className="flex flex-nowrap overflow-x-auto snap-mandatory pb-2 snap-x gap-1.5">
+            <ul className="flex flex-nowrap overflow-x-auto scrollbar-thin snap-mandatory pb-2 snap-x gap-1.5">
               {Object.values(emoji.styles).map((style) => (
                 <li key={style.group + style.id}>
                   <Button

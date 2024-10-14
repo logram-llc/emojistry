@@ -68,6 +68,12 @@
   }
 }
 
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+}
+
 body {
   /* NOTE(nicholas-ramsey): Radix's sheet forcefully sets the `pointer-events` attribute to `none`.
      This is a workaround. See: https://github.com/radix-ui/primitives/issues/2122 */
