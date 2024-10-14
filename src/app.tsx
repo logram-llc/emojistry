@@ -138,7 +138,7 @@ function PictureInPictureButton() {
         <Button
           size="icon"
           variant="rounded"
-          className="fixed z-50 drop-shadow-lg bottom-2 right-2"
+          className="fixed z-50 drop-shadow-lg bottom-2 right-4"
           onClick={openPictureInPicture}
         >
           <PictureInPicture className="size-5 min-w-5" />
