@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/tooltip';
 import { UrlManager } from '@/lib/UrlManager';
 import { useEmojiGridSettings } from '@/providers/EmojiGridSettingsProvider';
+import { cn } from '@/lib/utils';
 
 /**
  * Copies the given text to the clipboard.
@@ -96,15 +97,36 @@ function ShareAction({
     <TooltipOnClick message="Copied URL!" onSuccess={onClick}>
       {/* TODO(nicholas-ramsey): Clean this module/component up. I don't like using `data-testid` */}
       <Button
-        variant="ghost"
-        size="xs"
-        className={isMobile ? 'flex lg:hidden' : 'hidden lg:flex'}
+        size="icon-sm"
+        variant="ghost-dark"
+        className={cn(
+          isMobile ? 'flex lg:hidden' : 'hidden lg:flex',
+          'rounded-full',
+        )}
         aria-label={ariaLabel}
         data-testid={isMobile ? 'mobile-share-url' : 'desktop-share-url'}
       >
-        <Share2 className="size-5 min-w-5" />
+        <Share2 className="size-4 min-w-4" />
       </Button>
     </TooltipOnClick>
+  );
+}
+
+function ButtonGroup({
+  label,
+  children,
+}: {
+  label: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className={'inline-flex items-center bg-muted p-0.5 h-11 rounded-full'}
+    >
+      <span className="mr-2.5 ml-4 text-xs font-semibold">{label}</span>
+
+      <div className="bg-popover rounded-full">{children}</div>
+    </div>
   );
 }
 
@@ -171,116 +193,141 @@ function EmojiPanel({ emoji, id, onClose }: EmojiPanelProps): ReactNode {
 
   return (
     <section className="flex flex-col" role="tabpanel" id={id}>
-      <div className="flex justify-between items-center mb-2">
-        <div className="flex items-center overflow-hidden gap-1 mr-2">
-          <h2 className="truncate text-foreground text-lg font-bold">
-            {emoji.tts}
-          </h2>
+      <header className="pb-2 border-b border-muted">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center overflow-hidden gap-2 mr-2">
+            <h2 className="truncate text-foreground text-lg font-bold">
+              {emoji.tts}
+            </h2>
 
-          <ShareButton emoji={emoji} />
-        </div>
+            <span className="inline-flex items-center leading-5 h-8 bg-muted px-2.5 text-sm font-semibold rounded-full">
+              <Tag className="inline size-4 min-w-4 mr-1 opacity-60" />{' '}
+              {emoji.group}
+            </span>
 
-        <Button
-          variant="ghost"
-          size="xs"
-          aria-label="Close panel"
-          onClick={onClose}
-        >
-          <X className="size-5 min-w-5" />
-        </Button>
-      </div>
-
-      <div className="bg-muted/50 rounded-3xl py-4 flex items-center justify-center relative">
-        <img className="size-28 sm:size-48" src={emojiStyle.url}></img>
-
-        <div className="absolute right-0 top-0 bottom-0 flex flex-col justify-center mr-3 gap-1">
-          {emojiStyle.colorPalette.map((color) => (
-            <TooltipOnClick
-              message="Copied hex!"
-              onSuccess={() => copyTextToClipboard(color.hex)}
-              key={color.hex}
-            >
-              <Button
-                variant="ghost"
-                size="icon"
-                className="size-6 min-w-6 rounded-full ring ring-muted ring-2 -mt-2"
-                style={{
-                  backgroundColor: color.hex,
-                }}
-                aria-label={`Copy color ${color.hex}`}
-              >
-                <data className="uppercase sr-only">{color.hex}</data>
-              </Button>
-            </TooltipOnClick>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        {Object.keys(emoji.styles).length > 1 && (
-          <div className="my-2">
-            <span className="sr-only">Variants</span>
-            <ul className="flex flex-nowrap overflow-x-auto scrollbar-thin snap-mandatory pb-2 snap-x gap-1.5">
-              {Object.values(emoji.styles).map((style) => (
-                <li key={style.group + style.id}>
-                  <Button
-                    size="icon"
-                    variant="secondary"
-                    className="p-6 snap-start"
-                    onClick={() => setEmojiStyle(style)}
-                    aria-label={`View emoji style ${style.group} ${style.label}`}
-                  >
-                    <img
-                      className="size-10 min-w-10"
-                      src={style.url}
-                      aria-label={`Emoji style ${style.label}`}
-                    ></img>
-                  </Button>
-                </li>
-              ))}
-            </ul>
+            <ShareButton emoji={emoji} />
           </div>
-        )}
 
-        <div className="flex gap-2 my-2">
           <Button
-            size="sm"
-            variant="secondary"
-            aria-label="Download emoji"
-            onClick={handleDownloadClick}
+            variant="ghost-dark"
+            size="icon-sm"
+            className="rounded-full"
+            aria-label="Close panel"
+            onClick={onClose}
           >
-            <Download className="size-4 min-w-4 mr-2" />
-            {emojiStyle.isSvg ? 'SVG' : 'PNG'}
+            <X className="size-5 min-w-5" />
           </Button>
-
-          <TooltipOnClick message="Copied!" onSuccess={handleCopyClick}>
-            <Button
-              variant="secondary"
-              size="sm"
-              aria-label="Copy emoji to clipboard"
-            >
-              <Copy className="size-4 min-w-4 mr-2" />
-              {emojiStyle.isSvg ? 'SVG' : 'PNG'}
-            </Button>
-          </TooltipOnClick>
         </div>
 
-        <div className="inline-flex flex-wrap items-center mt-1">
-          <span className="inline-flex items-center leading-5">
-            <Tag className="inline size-4 min-w-4 mr-2" /> {emoji.group}
-          </span>
-          <span className="mx-1">&mdash;</span>
-          <ul className="inline-flex gap-1 flex-wrap">
-            {emoji.keywords.map((keyword) => (
-              <li key={keyword} className="leading-5">
-                {keyword}
-                <span className="select-none font-bold"> &middot;</span>
-              </li>
-            ))}
-            <li className="leading-5">
-              <span>{emoji.glyph}</span>
+        <ul className="mt-1 text-sm inline-flex gap-1 flex-wrap">
+          {emoji.keywords.map((keyword) => (
+            <li key={keyword} className="leading-5">
+              {keyword}
+              <span className="select-none font-bold"> &middot;</span>
             </li>
-          </ul>
+          ))}
+          <li className="leading-5">
+            <span>{emoji.glyph}</span>
+          </li>
+        </ul>
+      </header>
+
+      <div className="flex flex-col lg:flex-row">
+        <section className="lg:max-w-[20rem] lg:min-w-[20rem] pt-4 border-b lg:border-b-0 lg:pb-0 lg:pr-4 lg:border-r border-muted">
+          <div className="bg-muted/50 rounded-3xl py-4 flex items-center justify-center relative">
+            <img className="size-28 sm:size-48" src={emojiStyle.url}></img>
+          </div>
+
+          {Object.keys(emoji.styles).length > 1 && (
+            <div className="my-2">
+              <span className="sr-only">Variants</span>
+              <ul className="flex flex-nowrap overflow-x-auto scrollbar-thin snap-mandatory pb-2 snap-x gap-1.5">
+                {Object.values(emoji.styles).map((style) => (
+                  <li key={style.group + style.id}>
+                    <Button
+                      size="icon"
+                      variant="ghost-dark"
+                      className="p-6 snap-start"
+                      onClick={() => setEmojiStyle(style)}
+                      aria-label={`View emoji style ${style.group} ${style.label}`}
+                    >
+                      <img
+                        className="size-10 min-w-10"
+                        src={style.url}
+                        aria-label={`Emoji style ${style.label}`}
+                      ></img>
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+
+        <div className="pt-4 lg:pl-4">
+          <section className="mb-4">
+            <span className="text-gray-800 dark:text-gray-200 font-semibold text-sm">
+              Dominant Colors
+            </span>
+
+            <div className="mt-1.5 flex gap-1">
+              {emojiStyle.colorPalette.map((color) => (
+                <TooltipOnClick
+                  message="Copied hex!"
+                  onSuccess={() => copyTextToClipboard(color.hex)}
+                  key={color.hex}
+                >
+                  <Button
+                    variant="ghost-dark"
+                    className="rounded-full flex items-center gap-2 p-0.5 px-4 h-11 font-semibold text-xs"
+                    aria-label={`Copy color ${color.hex}`}
+                  >
+                    <div
+                      className="size-6 min-w-6 rounded-full"
+                      style={{
+                        backgroundColor: color.hex,
+                      }}
+                    >
+                      <data className="uppercase sr-only">{color.hex}</data>
+                    </div>
+
+                    <data className="uppercase">{color.hex}</data>
+                  </Button>
+                </TooltipOnClick>
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <span className="text-gray-800 dark:text-gray-200 font-semibold text-sm">
+              Copy/Download
+            </span>
+
+            <div className="mt-1.5">
+              <ButtonGroup label={emojiStyle.isSvg ? 'SVG' : 'PNG'}>
+                <Button
+                  size="icon"
+                  variant="ghost-bright"
+                  aria-label="Download emoji"
+                  className="rounded-full"
+                  onClick={handleDownloadClick}
+                >
+                  <Download className="size-4 min-w-4" />
+                </Button>
+
+                <TooltipOnClick message="Copied!" onSuccess={handleCopyClick}>
+                  <Button
+                    variant="ghost-bright"
+                    size="icon"
+                    className="rounded-full"
+                    aria-label="Copy emoji to clipboard"
+                  >
+                    <Copy className="size-4 min-w-4" />
+                  </Button>
+                </TooltipOnClick>
+              </ButtonGroup>
+            </div>
+          </section>
         </div>
       </div>
     </section>
