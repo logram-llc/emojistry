@@ -136,9 +136,9 @@ function PictureInPictureButton() {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          size="icon"
+          size="icon-lg"
           variant="rounded"
-          className="fixed z-50 drop-shadow-lg bottom-2 right-4"
+          className="fixed z-50 drop-shadow-lg bottom-6 right-8"
           onClick={openPictureInPicture}
         >
           <PictureInPicture className="size-5 min-w-5" />
