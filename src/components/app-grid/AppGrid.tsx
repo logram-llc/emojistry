@@ -7,6 +7,7 @@ import {
   useMemo,
   RefObject,
   memo,
+  useLayoutEffect,
 } from 'react';
 import {
   VariableSizeGrid,
@@ -370,17 +371,24 @@ export const EmojiGrid = memo<EmojiGridProps>(
       <div className="flex flex-row grow relative">
         <div className={'grow'}>{grid}</div>
 
-        {selectedEmoji !== null && (
-          <div className="bg-card p-4 absolute bottom-0 left-0 right-0 rounded-xl rounded-b-none h-max">
-            <div className="mx-auto max-w-7xl">
+        <div
+          data-state={emojiPanelOpen ? 'open' : 'closed'}
+          aria-hidden={!emojiPanelOpen}
+          className="fixed z-40 gap-4 shadow-2xl shadow-black transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500 bg-card inset-x-0 bottom-0 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom rounded-xl rounded-b-none"
+        >
+          <div className="mx-auto max-w-7xl my-4">
+            {selectedEmoji !== null && (
               <EmojiPanel
                 emoji={selectedEmoji}
                 id={emojiPanelId}
-                onClose={() => setSelectedEmoji(null)}
+                onClose={() => {
+                  setEmojiPanelOpen(false);
+                  setTimeout(() => setSelectedEmoji(null), 300);
+                }}
               />
-            </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     );
   },
