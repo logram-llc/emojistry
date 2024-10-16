@@ -368,15 +368,17 @@ export const EmojiGrid = memo<EmojiGridProps>(
 
     return (
       <div className="flex flex-row grow relative">
-        <div className="grow">{grid}</div>
+        <div className={'grow'}>{grid}</div>
 
         {selectedEmoji !== null && (
-          <div className="lg:w-96 bg-card p-4 fixed bottom-0 left-0 right-0 my-2 mx-2 lg:sticky lg:top-20 lg:bottom-none lg:left-none lg:my-0 rounded-2xl h-max">
-            <EmojiPanel
-              emoji={selectedEmoji}
-              id={emojiPanelId}
-              onClose={() => setSelectedEmoji(null)}
-            />
+          <div className="bg-card p-4 absolute bottom-0 left-0 right-0 rounded-xl rounded-b-none h-max">
+            <div className="mx-auto max-w-7xl">
+              <EmojiPanel
+                emoji={selectedEmoji}
+                id={emojiPanelId}
+                onClose={() => setSelectedEmoji(null)}
+              />
+            </div>
           </div>
         )}
       </div>

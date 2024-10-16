@@ -4,13 +4,14 @@
   position: relative;
 
   outline: 2px solid transparent;
+  background: hsl(var(--accent) / 0.5);
   border-radius: theme('borderRadius.lg');
   transform: scale(1);
   transition: transform 100ms ease-in-out;
 
   &:hover,
   &:focus {
-    background-color: hsl(var(--accent));
+    outline-color: hsl(var(--accent));
   }
 
   &:active,
