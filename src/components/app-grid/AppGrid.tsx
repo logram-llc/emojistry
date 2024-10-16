@@ -7,7 +7,6 @@ import {
   useMemo,
   RefObject,
   memo,
-  useLayoutEffect,
 } from 'react';
 import {
   VariableSizeGrid,
@@ -27,6 +26,12 @@ import {
   EMOJI_GRID_GAP,
   EMOJI_SIZE_IN_SPRITESHEET,
 } from '@/components/app-grid/constants';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+} from '@/components/ui/sheet';
 
 interface IEmojiCell {
   type: 'emoji';
@@ -368,27 +373,42 @@ export const EmojiGrid = memo<EmojiGridProps>(
     );
 
     return (
-      <div className="flex flex-row grow relative">
+      <div
+        className="flex flex-row grow relative"
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') {
+            setEmojiPanelOpen(false);
+          }
+        }}
+      >
         <div className={'grow'}>{grid}</div>
 
-        <div
-          data-state={emojiPanelOpen ? 'open' : 'closed'}
-          aria-hidden={!emojiPanelOpen}
-          className="fixed z-40 gap-4 shadow-2xl shadow-black transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500 bg-card inset-x-0 bottom-0 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom rounded-xl rounded-b-none"
-        >
-          <div className="mx-auto max-w-7xl my-4">
-            {selectedEmoji !== null && (
-              <EmojiPanel
-                emoji={selectedEmoji}
-                id={emojiPanelId}
-                onClose={() => {
-                  setEmojiPanelOpen(false);
-                  setTimeout(() => setSelectedEmoji(null), 300);
-                }}
-              />
-            )}
-          </div>
-        </div>
+        <Sheet open={emojiPanelOpen}>
+          <SheetContent
+            className="shadow-2xl shadow-black bg-card border-t-0"
+            side="bottom"
+            hideClose
+            overlay={false}
+          >
+            <SheetTitle className="sr-only">Emoji</SheetTitle>
+            <SheetDescription className="sr-only">
+              Currently selected emoji
+            </SheetDescription>
+
+            <div className="mx-auto max-w-7xl my-4">
+              {selectedEmoji !== null && (
+                <EmojiPanel
+                  emoji={selectedEmoji}
+                  id={emojiPanelId}
+                  onClose={() => {
+                    setEmojiPanelOpen(false);
+                    setTimeout(() => setSelectedEmoji(null), 300);
+                  }}
+                />
+              )}
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     );
   },
