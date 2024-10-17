@@ -386,7 +386,7 @@ export const EmojiGallery = memo<IEmojiGalleryProps>(
       >
         <div className="grow">{grid}</div>
 
-        <Sheet open={emojiPanelOpen}>
+        <Sheet open={emojiPanelOpen} allowOutsideInteraction>
           <SheetContent
             className="shadow-2xl shadow-black bg-card border-t-0"
             side="bottom"
