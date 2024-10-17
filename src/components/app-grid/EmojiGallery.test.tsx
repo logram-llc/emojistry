@@ -10,7 +10,7 @@ import {
   Mocked,
   test,
 } from 'vitest';
-import { EmojiGrid } from '@/components/app-grid/AppGrid';
+import { EmojiGallery } from '@/components/app-grid/EmojiGallery';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import {
   IEmoji,
@@ -122,7 +122,7 @@ vi.mock('react-virtualized-auto-sizer', () => ({
   }) => children({ height: 600, width: 600 }),
 }));
 
-describe('EmojiGrid', () => {
+describe('EmojiGallery', () => {
   let mockUrlManager: Partial<Mocked<UrlManager>>;
   let mockSeoManager: Partial<Mocked<SeoManager>>;
 
@@ -164,7 +164,7 @@ describe('EmojiGrid', () => {
   it('[component] should render the emoji grid with provided emojis', () => {
     // Act
     renderComponentWithProviders(
-      <EmojiGrid
+      <EmojiGallery
         emojis={EMOJI_FIXTURES}
         urlManager={mockUrlManager as unknown as UrlManager}
         seoManager={mockSeoManager as unknown as SeoManager}
@@ -186,7 +186,7 @@ describe('EmojiGrid', () => {
   it('[component] should open the EmojiPanel when an emoji is clicked', async () => {
     // Act
     renderComponentWithProviders(
-      <EmojiGrid
+      <EmojiGallery
         emojis={EMOJI_FIXTURES}
         urlManager={mockUrlManager as unknown as UrlManager}
         seoManager={mockSeoManager as unknown as SeoManager}
@@ -206,7 +206,7 @@ describe('EmojiGrid', () => {
   it('[component] should close the EmojiPanel when the EmojiPanel close button is clicked', async () => {
     // Act
     renderComponentWithProviders(
-      <EmojiGrid
+      <EmojiGallery
         emojis={EMOJI_FIXTURES}
         urlManager={mockUrlManager as unknown as UrlManager}
         seoManager={mockSeoManager as unknown as SeoManager}
@@ -237,7 +237,7 @@ describe('EmojiGrid', () => {
     async ({ keypress }: { keypress: string }) => {
       // Act
       renderComponentWithProviders(
-        <EmojiGrid
+        <EmojiGallery
           emojis={EMOJI_FIXTURES}
           urlManager={mockUrlManager as unknown as UrlManager}
           seoManager={mockSeoManager as unknown as SeoManager}
@@ -271,7 +271,7 @@ describe('EmojiGrid', () => {
 
     // Act
     renderComponentWithProviders(
-      <EmojiGrid
+      <EmojiGallery
         emojis={EMOJI_FIXTURES}
         urlManager={mockUrlManager as unknown as UrlManager}
         seoManager={mockSeoManager as unknown as SeoManager}
@@ -287,7 +287,7 @@ describe('EmojiGrid', () => {
   it('[component] should support tab navigation to next emoji even after closing EmojiPanel', async () => {
     // Act
     renderComponentWithProviders(
-      <EmojiGrid
+      <EmojiGallery
         emojis={EMOJI_FIXTURES}
         urlManager={mockUrlManager as unknown as UrlManager}
         seoManager={mockSeoManager as unknown as SeoManager}
@@ -322,7 +322,7 @@ describe('EmojiGrid', () => {
   it('[component] should update URLManager when an emoji is selected', async () => {
     // Act
     renderComponentWithProviders(
-      <EmojiGrid
+      <EmojiGallery
         emojis={EMOJI_FIXTURES}
         urlManager={mockUrlManager as unknown as UrlManager}
         seoManager={mockSeoManager as unknown as SeoManager}
@@ -342,7 +342,7 @@ describe('EmojiGrid', () => {
   it('[component] should update SEOManager when an emoji is selected', async () => {
     // Act
     renderComponentWithProviders(
-      <EmojiGrid
+      <EmojiGallery
         emojis={EMOJI_FIXTURES}
         urlManager={mockUrlManager as unknown as UrlManager}
         seoManager={mockSeoManager as unknown as SeoManager}
@@ -393,7 +393,7 @@ describe('EmojiGrid', () => {
 
       // Act
       renderComponentWithProviders(
-        <EmojiGrid
+        <EmojiGallery
           emojis={EMOJI_FIXTURES}
           urlManager={mockUrlManager as unknown as UrlManager}
           seoManager={mockSeoManager as unknown as SeoManager}

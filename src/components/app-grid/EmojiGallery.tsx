@@ -216,13 +216,13 @@ function generateCells({
   return cells;
 }
 
-interface EmojiGridProps {
+interface IEmojiGalleryProps {
   emojis: IEmoji[];
   urlManager: UrlManager;
   seoManager: SeoManager;
 }
 
-export const EmojiGrid = memo<EmojiGridProps>(
+export const EmojiGallery = memo<IEmojiGalleryProps>(
   ({ emojis, urlManager, seoManager }) => {
     const {
       settings: { showEmojiGroups, emojiSize, skintone },
@@ -245,7 +245,6 @@ export const EmojiGrid = memo<EmojiGridProps>(
         if (emojiFromUrl) {
           setSelectedEmoji(emojiFromUrl);
           setEmojiPanelOpen(true);
-          // TODO: Set selectedEmojiRef
         }
       });
     }, []);
@@ -263,7 +262,7 @@ export const EmojiGrid = memo<EmojiGridProps>(
           setEmojiPanelOpen(true);
         }
       },
-      [emojiPanelOpen],
+      [emojiPanelOpen, setEmojiPanelOpen],
     );
     const handleEmojiKeyboardPress = useCallback(
       (event: KeyboardEvent<HTMLAnchorElement>, emoji: IEmoji) => {
@@ -276,6 +275,15 @@ export const EmojiGrid = memo<EmojiGridProps>(
         handleEmojiClick(emoji);
       },
       [emojiPanelOpen],
+    );
+
+    const handleEmojiPanelKeyboardPress = useCallback(
+      (e: KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === 'Escape') {
+          setEmojiPanelOpen(false);
+        }
+      },
+      [setEmojiPanelOpen],
     );
 
     useEffect(() => {
@@ -333,6 +341,7 @@ export const EmojiGrid = memo<EmojiGridProps>(
             height,
             columnCount,
             rowCount: Math.ceil(cells.length / columnCount),
+            className: '!overflow-x-hidden scrollbar-thin',
           };
 
           return showEmojiGroups ? (
@@ -350,7 +359,6 @@ export const EmojiGrid = memo<EmojiGridProps>(
                   ? 30
                   : (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale;
               }}
-              className="!overflow-x-hidden scrollbar-thin"
             >
               {EmojiGridCell}
             </VariableSizeGrid>
@@ -363,7 +371,6 @@ export const EmojiGrid = memo<EmojiGridProps>(
               rowHeight={
                 (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale
               }
-              className="!overflow-x-hidden scrollbar-thin"
             >
               {EmojiGridCell}
             </FixedSizeGrid>
@@ -375,13 +382,9 @@ export const EmojiGrid = memo<EmojiGridProps>(
     return (
       <div
         className="flex flex-row grow relative"
-        onKeyDown={(e) => {
-          if (e.key === 'Escape') {
-            setEmojiPanelOpen(false);
-          }
-        }}
+        onKeyDown={handleEmojiPanelKeyboardPress}
       >
-        <div className={'grow'}>{grid}</div>
+        <div className="grow">{grid}</div>
 
         <Sheet open={emojiPanelOpen}>
           <SheetContent
@@ -414,4 +417,4 @@ export const EmojiGrid = memo<EmojiGridProps>(
   },
 );
 
-EmojiGrid.displayName = 'EmojiGrid';
+EmojiGallery.displayName = 'EmojiGallery';
