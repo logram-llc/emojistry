@@ -26,6 +26,12 @@ import {
   EMOJI_GRID_GAP,
   EMOJI_SIZE_IN_SPRITESHEET,
 } from '@/components/app-grid/constants';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+} from '@/components/ui/sheet';
 
 interface IEmojiCell {
   type: 'emoji';
@@ -210,13 +216,13 @@ function generateCells({
   return cells;
 }
 
-interface EmojiGridProps {
+interface IEmojiGalleryProps {
   emojis: IEmoji[];
   urlManager: UrlManager;
   seoManager: SeoManager;
 }
 
-export const EmojiGrid = memo<EmojiGridProps>(
+export const EmojiGallery = memo<IEmojiGalleryProps>(
   ({ emojis, urlManager, seoManager }) => {
     const {
       settings: { showEmojiGroups, emojiSize, skintone },
@@ -239,7 +245,6 @@ export const EmojiGrid = memo<EmojiGridProps>(
         if (emojiFromUrl) {
           setSelectedEmoji(emojiFromUrl);
           setEmojiPanelOpen(true);
-          // TODO: Set selectedEmojiRef
         }
       });
     }, []);
@@ -257,7 +262,7 @@ export const EmojiGrid = memo<EmojiGridProps>(
           setEmojiPanelOpen(true);
         }
       },
-      [emojiPanelOpen],
+      [emojiPanelOpen, setEmojiPanelOpen],
     );
     const handleEmojiKeyboardPress = useCallback(
       (event: KeyboardEvent<HTMLAnchorElement>, emoji: IEmoji) => {
@@ -270,6 +275,15 @@ export const EmojiGrid = memo<EmojiGridProps>(
         handleEmojiClick(emoji);
       },
       [emojiPanelOpen],
+    );
+
+    const handleEmojiPanelKeyboardPress = useCallback(
+      (e: KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === 'Escape') {
+          setEmojiPanelOpen(false);
+        }
+      },
+      [setEmojiPanelOpen],
     );
 
     useEffect(() => {
@@ -327,6 +341,7 @@ export const EmojiGrid = memo<EmojiGridProps>(
             height,
             columnCount,
             rowCount: Math.ceil(cells.length / columnCount),
+            className: '!overflow-x-hidden scrollbar-thin',
           };
 
           return showEmojiGroups ? (
@@ -344,7 +359,6 @@ export const EmojiGrid = memo<EmojiGridProps>(
                   ? 30
                   : (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale;
               }}
-              className="!overflow-x-hidden scrollbar-thin"
             >
               {EmojiGridCell}
             </VariableSizeGrid>
@@ -357,7 +371,6 @@ export const EmojiGrid = memo<EmojiGridProps>(
               rowHeight={
                 (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale
               }
-              className="!overflow-x-hidden scrollbar-thin"
             >
               {EmojiGridCell}
             </FixedSizeGrid>
@@ -367,23 +380,41 @@ export const EmojiGrid = memo<EmojiGridProps>(
     );
 
     return (
-      <div className="flex flex-row grow relative">
-        <div className={'grow'}>{grid}</div>
+      <div
+        className="flex flex-row grow relative"
+        onKeyDown={handleEmojiPanelKeyboardPress}
+      >
+        <div className="grow">{grid}</div>
 
-        {selectedEmoji !== null && (
-          <div className="bg-card p-4 absolute bottom-0 left-0 right-0 rounded-xl rounded-b-none h-max">
-            <div className="mx-auto max-w-7xl">
-              <EmojiPanel
-                emoji={selectedEmoji}
-                id={emojiPanelId}
-                onClose={() => setSelectedEmoji(null)}
-              />
+        <Sheet open={emojiPanelOpen} allowOutsideInteraction>
+          <SheetContent
+            className="shadow-2xl shadow-black bg-card border-t-0"
+            side="bottom"
+            hideClose
+            overlay={false}
+          >
+            <SheetTitle className="sr-only">Emoji</SheetTitle>
+            <SheetDescription className="sr-only">
+              Currently selected emoji
+            </SheetDescription>
+
+            <div className="mx-auto max-w-7xl my-4">
+              {selectedEmoji !== null && (
+                <EmojiPanel
+                  emoji={selectedEmoji}
+                  id={emojiPanelId}
+                  onClose={() => {
+                    setEmojiPanelOpen(false);
+                    setTimeout(() => setSelectedEmoji(null), 300);
+                  }}
+                />
+              )}
             </div>
-          </div>
-        )}
+          </SheetContent>
+        </Sheet>
       </div>
     );
   },
 );
 
-EmojiGrid.displayName = 'EmojiGrid';
+EmojiGallery.displayName = 'EmojiGallery';

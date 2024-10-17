@@ -10,7 +10,26 @@ import { X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
-const Sheet = SheetPrimitive.Root;
+interface SheetProps
+  extends Omit<ComponentPropsWithoutRef<typeof SheetPrimitive.Root>, 'modal'> {
+  /**
+   * This is equivalent to `SheetPrimitive.Root`'s `modal` prop, but more clearly indicates
+   * to component users that the outside elements will be disabled for screen readers.
+   */
+  allowOutsideInteraction?: boolean;
+}
+
+function Sheet({
+  allowOutsideInteraction: outsideInteractivity = false,
+  ...rest
+}: SheetProps) {
+  return (
+    <SheetPrimitive.Root
+      modal={!outsideInteractivity}
+      {...rest}
+    ></SheetPrimitive.Root>
+  );
+}
 
 const SheetTrigger = SheetPrimitive.Trigger;
 
@@ -58,7 +77,11 @@ interface SheetContentProps
 
 const SheetContent = forwardRef<
   ElementRef<typeof SheetPrimitive.Content>,
-  SheetContentProps & { overlay?: boolean; onCloseClick?: () => void }
+  SheetContentProps & {
+    overlay?: boolean;
+    hideClose?: boolean;
+    onCloseClick?: () => void;
+  }
 >(
   (
     {
@@ -67,6 +90,7 @@ const SheetContent = forwardRef<
       children,
       overlay,
       onCloseClick = () => null,
+      hideClose = false,
       ...props
     },
     ref,
@@ -79,13 +103,15 @@ const SheetContent = forwardRef<
         {...props}
       >
         {children}
-        <SheetPrimitive.Close
-          onClick={onCloseClick}
-          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-0 disabled:pointer-events-none data-[state=open]:bg-secondary"
-        >
-          <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
-        </SheetPrimitive.Close>
+        {!hideClose && (
+          <SheetPrimitive.Close
+            onClick={onCloseClick}
+            className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-0 disabled:pointer-events-none data-[state=open]:bg-secondary"
+          >
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </SheetPrimitive.Close>
+        )}
       </SheetPrimitive.Content>
     </SheetPortal>
   ),

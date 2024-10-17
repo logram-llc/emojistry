@@ -1,7 +1,7 @@
 import { HTMLProps, forwardRef, useMemo, memo } from 'react';
 import { cn } from '@/lib/utils';
 import { EmojiFamily, EmojiSkintone, IEmoji } from '@/lib/emojis/EmojiTypes';
-import styles from './AppGrid.module.css';
+import styles from './EmojiGallery.module.css';
 import {
   normalizeFamilyName,
   getSkintoneGroup,

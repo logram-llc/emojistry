@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { PictureInPicture } from 'lucide-react';
-import { EmojiGrid } from '@/components/app-grid/AppGrid';
+import { EmojiGallery } from '@/components/app-grid/EmojiGallery';
 import { AppHeader } from '@/components/AppHeader';
 import { AppSearch } from '@/components/AppSearch';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -103,7 +103,7 @@ function EmojiExplorer() {
           <AppHeader id="app-header" setSortComparator={setSortComparator}>
             <AppSearch setQuery={setQuery} query={query} />
           </AppHeader>
-          <EmojiGrid
+          <EmojiGallery
             emojis={Object.values(sortedEmojis)}
             urlManager={URL_MANAGER}
             seoManager={SEO_MANAGER}
