@@ -10,7 +10,26 @@ import { X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
-const Sheet = SheetPrimitive.Root;
+interface SheetProps
+  extends Omit<ComponentPropsWithoutRef<typeof SheetPrimitive.Root>, 'modal'> {
+  /**
+   * This is equivalent to `SheetPrimitive.Root`'s `modal` prop, but more clearly indicates
+   * to component users that the outside elements will be disabled for screen readers.
+   */
+  allowOutsideInteraction?: boolean;
+}
+
+function Sheet({
+  allowOutsideInteraction: outsideInteractivity = false,
+  ...rest
+}: SheetProps) {
+  return (
+    <SheetPrimitive.Root
+      modal={!outsideInteractivity}
+      {...rest}
+    ></SheetPrimitive.Root>
+  );
+}
 
 const SheetTrigger = SheetPrimitive.Trigger;
 
