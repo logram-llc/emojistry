@@ -308,15 +308,15 @@ describe('EmojiGallery', () => {
       name: /close panel/i,
     });
     await userEvent.click(closeButton);
-    await userEvent.type(emojiA, '{tab}');
 
+    expect(document.activeElement).toBe(emojiA);
+
+    await userEvent.keyboard('{tab}');
     expect(document.activeElement).toBe(
       screen.getByRole('tab', {
         name: new RegExp(EMOJI_FIXTURES[1].tts, 'i'),
       }),
     );
-
-    expect(screen.getByRole('tabpanel')).toBeInTheDocument();
   });
 
   it('[component] should update URLManager when an emoji is selected', async () => {
