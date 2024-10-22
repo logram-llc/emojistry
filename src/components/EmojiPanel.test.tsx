@@ -122,7 +122,7 @@ describe('EmojiPanel', () => {
     expect(screen.getByText('face')).toBeInTheDocument();
   });
 
-  it('[component] should copy the emoji SVG to clipboard when copy button is clicked', async () => {
+  it('[component] should copy the emoji SVG image to clipboard when copy button is clicked', async () => {
     // Arrange
     mockFetch.mockResolvedValue({
       ok: true,
@@ -153,8 +153,61 @@ describe('EmojiPanel', () => {
     expect(copyButton).toBeInTheDocument();
     await userEvent.click(copyButton);
 
-    expect(mockFetch).toHaveBeenCalledOnce();
+    expect(mockFetch).toHaveBeenCalled();
     expect(navigator.clipboard.write).toHaveBeenCalledOnce();
+  });
+
+  it('[component] should render SVG copy input if emoji style is SVG', async () => {
+    // Arrange
+    mockFetch.mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve('<svg>Mock SVG</svg>'),
+    });
+
+    const svgEmoji = EMOJI_FIXTURES[0];
+
+    // Act
+    renderComponentWithProviders(
+      <EmojiPanel emoji={svgEmoji} id="emoji-panel" onClose={mockOnClose} />,
+    );
+
+    await vi.waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledWith(
+        svgEmoji.styles[svgEmoji.defaultStyle].url,
+      );
+    });
+
+    // Assert
+    await vi.waitFor(() => {
+      const input = screen.getByRole('button', {
+        name: /copy svg to clipboard/i,
+      });
+      expect(input).toBeInTheDocument();
+    });
+  });
+
+  it('[component] should not render SVG copy input if emoji style is PNG', async () => {
+    // Arrange
+    const pngEmoji = EMOJI_FIXTURES[1];
+
+    // Act
+    renderComponentWithProviders(
+      <EmojiPanel emoji={pngEmoji} id="emoji-panel" onClose={mockOnClose} />,
+    );
+
+    await vi.waitFor(() => {
+      expect(mockFetch).not.toHaveBeenCalledWith(
+        pngEmoji.styles[pngEmoji.defaultStyle].url,
+      );
+    });
+
+    // Assert
+    await vi.waitFor(() => {
+      const input = screen.queryByRole('button', {
+        name: /copy svg to clipboard/i,
+      });
+      expect(input).not.toBeInTheDocument();
+    });
   });
 
   it('[component] should copy the emoji image to clipboard when copy button is clicked', async () => {
