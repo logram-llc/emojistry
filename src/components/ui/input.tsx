@@ -16,14 +16,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           className={cn(
             'flex h-9 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50',
             className,
-            { 'pl-7': icon },
+            { 'pl-8': icon },
           )}
           ref={ref}
           {...props}
         />
 
         {icon && (
-          <div className="absolute flex items-center justify-center top-0 bottom-0 left-2 text-muted-foreground">
+          <div className="select-none pointer-events-none absolute flex items-center justify-center top-0 bottom-0 left-3 text-muted-foreground">
             {icon}
           </div>
         )}

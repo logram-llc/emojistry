@@ -16,6 +16,29 @@ import {
 import { UrlManager } from '@/lib/UrlManager';
 import { useEmojiGridSettings } from '@/providers/EmojiGridSettingsProvider';
 import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+
+function useSvg(emojiStyle: IEmojiStyle) {
+  const [svgCode, setSvgCode] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!emojiStyle.isSvg) {
+      setSvgCode(null);
+      return;
+    }
+
+    async function getSvg(url: string): Promise<string> {
+      const res = await fetch(url);
+      return res.text();
+    }
+
+    getSvg(emojiStyle.url)
+      .then(setSvgCode)
+      .catch(() => setSvgCode(null));
+  }, [emojiStyle.url, emojiStyle.isSvg]);
+
+  return svgCode;
+}
 
 /**
  * Copies the given text to the clipboard.
@@ -167,6 +190,7 @@ function EmojiPanel({ emoji, id, onClose }: EmojiPanelProps): ReactNode {
   const [emojiStyle, setEmojiStyle] = useState<IEmojiStyle>(
     emoji.styles[emoji.defaultStyle],
   );
+  const svgCode = useSvg(emojiStyle);
   const { settings } = useEmojiGridSettings();
 
   useEffect(() => {
@@ -179,7 +203,7 @@ function EmojiPanel({ emoji, id, onClose }: EmojiPanelProps): ReactNode {
   }, [emoji.id, settings.skintone]);
 
   const handleCopyClick = useCallback(async () => {
-    const mimeType = emojiStyle.isSvg ? 'text/plain' : 'image/png';
+    const mimeType = emojiStyle.isSvg ? 'image/svg+xml' : 'image/png';
     await navigator.clipboard.write([
       new ClipboardItem({
         [mimeType]: fetch(emojiStyle.url).then((res) => res.blob()),
@@ -298,35 +322,60 @@ function EmojiPanel({ emoji, id, onClose }: EmojiPanelProps): ReactNode {
             </div>
           </section>
 
-          <section>
-            <span className="text-gray-800 dark:text-gray-200 font-semibold text-sm">
-              Copy/Download
-            </span>
+          <section className="flex flex-col lg:flex-row">
+            <div>
+              <span className="text-gray-800 dark:text-gray-200 font-semibold text-sm">
+                Copy/Download
+              </span>
 
-            <div className="mt-1.5">
-              <ButtonGroup label={emojiStyle.isSvg ? 'SVG' : 'PNG'}>
-                <Button
-                  size="icon"
-                  variant="ghost-bright"
-                  aria-label="Download emoji"
-                  className="rounded-full"
-                  onClick={handleDownloadClick}
-                >
-                  <Download className="size-4 min-w-4" />
-                </Button>
-
-                <TooltipOnClick message="Copied!" onSuccess={handleCopyClick}>
+              <div className="mt-1.5">
+                <ButtonGroup label={emojiStyle.isSvg ? 'SVG' : 'PNG'}>
                   <Button
-                    variant="ghost-bright"
                     size="icon"
+                    variant="ghost-bright"
+                    aria-label="Download emoji"
                     className="rounded-full"
-                    aria-label="Copy emoji to clipboard"
+                    onClick={handleDownloadClick}
                   >
-                    <Copy className="size-4 min-w-4" />
+                    <Download className="size-4 min-w-4" />
                   </Button>
-                </TooltipOnClick>
-              </ButtonGroup>
+
+                  <TooltipOnClick message="Copied!" onSuccess={handleCopyClick}>
+                    <Button
+                      variant="ghost-bright"
+                      size="icon"
+                      className="rounded-full"
+                      aria-label="Copy emoji to clipboard"
+                    >
+                      <Copy className="size-4 min-w-4" />
+                    </Button>
+                  </TooltipOnClick>
+                </ButtonGroup>
+              </div>
             </div>
+
+            {emojiStyle.isSvg && svgCode !== null && (
+              <div className="pt-4 lg:pt-0 lg:pl-4">
+                <span className="text-gray-800 dark:text-gray-200 font-semibold text-sm">
+                  SVG
+                </span>
+
+                <TooltipOnClick
+                  message="Copied!"
+                  onSuccess={() => copyTextToClipboard(svgCode)}
+                >
+                  <Input
+                    icon={<Copy className="size-4 min-w-4" />}
+                    type="text"
+                    className="rounded-full h-11 text-ellipsis lg:w-[20rem] mt-1.5"
+                    value={svgCode}
+                    readOnly
+                    aria-label="Copy SVG to clipboard"
+                    role="button"
+                  />
+                </TooltipOnClick>
+              </div>
+            )}
           </section>
         </div>
       </div>
