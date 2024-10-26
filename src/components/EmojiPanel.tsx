@@ -224,7 +224,7 @@ function EmojiPanel({ emoji, id, onClose }: EmojiPanelProps): ReactNode {
               {emoji.tts}
             </h2>
 
-            <span className="inline-flex items-center leading-5 h-8 bg-muted px-2.5 text-sm font-semibold rounded-full">
+            <span className="whitespace-nowrap inline-flex items-center leading-5 h-8 bg-muted px-2.5 text-sm font-semibold rounded-full">
               <Tag className="inline size-4 min-w-4 mr-1 opacity-60" />{' '}
               {emoji.group}
             </span>
