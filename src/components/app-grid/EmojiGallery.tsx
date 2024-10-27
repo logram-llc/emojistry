@@ -390,7 +390,7 @@ export const EmojiGallery = memo<IEmojiGalleryProps>(
 
         <Sheet open={emojiPanelOpen} allowOutsideInteraction>
           <SheetContent
-            className="shadow-2xl shadow-black bg-card border-t-0"
+            className="shadow-2xl shadow-black bg-card border-t-0 py-0 lg:py-6"
             side="bottom"
             hideClose
             overlay={false}
