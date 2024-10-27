@@ -49,7 +49,7 @@ const Emoji = memo(
           className={cn(
             styles.emoji,
             selected && styles['emoji--selected'],
-            'group relative hover:z-50',
+            'group relative hover:z-50 inline-flex justify-center',
           )}
           tabIndex={0}
           ref={ref}
@@ -67,9 +67,12 @@ const Emoji = memo(
                 emojiFamily,
               )}/${getSkintoneSpritesheet(getSkintoneGroup(emojiStyle))})`,
               transformOrigin: 'top left',
-              transform: `scale(${scale})`,
+              transform: `scale(${scale}) translate(-50%, 0)`,
+              inset: 0,
+              position: 'absolute',
+              left: '50%',
             }}
-          ></div>
+          />
 
           <span
             className={cn(
