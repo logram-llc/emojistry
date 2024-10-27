@@ -95,9 +95,10 @@ const EmojiGridCell = memo(
     if (item.type === 'group-label') {
       return (
         <h2
-          className="text-sm tracking-wide ml-1 pb-1 inline-flex items-end text-nowrap"
+          className="text-sm tracking-wide pb-1 inline-flex items-end text-nowrap"
           style={{
             ...style,
+            marginLeft: EMOJI_GRID_GAP * emojiScale,
           }}
         >
           {item.content}
@@ -311,9 +312,13 @@ export const EmojiGallery = memo<IEmojiGalleryProps>(
     const grid = (
       <AutoSizer key={emojiSize} className="overflow-hidden">
         {({ height, width }) => {
-          const columnCount = Math.floor(
-            width / ((EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale),
+          const columnSize = Math.floor(
+            (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale,
           );
+          const columnCount = Math.floor(width / columnSize);
+          const remainingWhitespace =
+            width - EMOJI_GRID_GAP * 2 * emojiScale - columnSize * columnCount;
+          const columnGrowth = remainingWhitespace / columnCount;
 
           const cells = generateCells({
             emojis,
@@ -334,6 +339,7 @@ export const EmojiGallery = memo<IEmojiGalleryProps>(
               handleEmojiClick,
               handleEmojiKeyboardPress,
               columnCount,
+              columnSize: columnSize + columnGrowth,
             },
             overscanRowCount: 5,
             innerRef: gridRef,
@@ -347,11 +353,8 @@ export const EmojiGallery = memo<IEmojiGalleryProps>(
           return showEmojiGroups ? (
             <VariableSizeGrid<IEmojiGridCellData>
               {...defaultGridProps}
-              columnWidth={() =>
-                Math.floor(
-                  (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale,
-                )
-              }
+              key={`${columnSize + columnGrowth}`}
+              columnWidth={() => columnSize + columnGrowth}
               rowHeight={(rowIndex) => {
                 const item = cells[rowIndex];
 
@@ -365,9 +368,8 @@ export const EmojiGallery = memo<IEmojiGalleryProps>(
           ) : (
             <FixedSizeGrid<IEmojiGridCellData>
               {...defaultGridProps}
-              columnWidth={Math.floor(
-                (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale,
-              )}
+              key={`${columnSize + columnGrowth}`}
+              columnWidth={columnSize + columnGrowth}
               rowHeight={
                 (EMOJI_SIZE_IN_SPRITESHEET + EMOJI_GRID_GAP) * emojiScale
               }
