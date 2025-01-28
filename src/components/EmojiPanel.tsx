@@ -354,6 +354,27 @@ function EmojiPanel({ emoji, id, onClose }: EmojiPanelProps): ReactNode {
               </div>
             </div>
 
+            <div className="pt-4 lg:pt-0 lg:pl-4">
+              <span className="text-gray-800 dark:text-gray-200 font-semibold text-sm">
+                Glyph
+              </span>
+
+              <TooltipOnClick
+                message="Copied glyph!"
+                onSuccess={() => copyTextToClipboard(emoji.glyph)}
+              >
+                <Button
+                  variant="ghost-bright"
+                  className="flex rounded-full mt-1.5"
+                  aria-label="Copy glyph to clipboard"
+                >
+                  <Copy className="size-4 min-w-4 mr-1" />
+                  <span className="mr-1.5 text-sm font-semibold">Glyph</span>
+                  <span className="text-lg">{emoji.glyph}</span>
+                </Button>
+              </TooltipOnClick>
+            </div>
+
             {emojiStyle.isSvg && svgCode !== null && (
               <div className="pt-4 lg:pt-0 lg:pl-4">
                 <span className="text-gray-800 dark:text-gray-200 font-semibold text-sm">
