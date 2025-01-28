@@ -55,7 +55,7 @@
     "eslint-plugin-react": "^7.36.1",
     "fast-xml-parser": "^4.5.0",
     "jsdom": "^25.0.0",
-    "node-vibrant": "^3.2.1-alpha.1",
+    "node-vibrant": "^4.0.3",
     "postcss": "^8.4.47",
     "prettier": "^3.3.3",
     "react": "^18.3.1",
