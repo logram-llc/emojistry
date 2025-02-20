@@ -365,7 +365,7 @@ function EmojiPanel({ emoji, id, onClose }: EmojiPanelProps): ReactNode {
               >
                 <Button
                   variant="ghost-bright"
-                  className="flex rounded-full mt-1.5"
+                  className="flex rounded-full h-11 mt-1.5"
                   aria-label="Copy glyph to clipboard"
                 >
                   <Copy className="size-4 min-w-4 mr-1" />
